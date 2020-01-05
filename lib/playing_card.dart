@@ -28,9 +28,6 @@ class PlayingCard {
 
 List<PlayingCard> makeDeck() {
   List<PlayingCard> deck = [];
-  //make four deck shoe
-//  for (int i = 0; i < 4; i++) {
-
   // make standard 52 card deck
   CardSuit.values.forEach((suit) {
     CardType.values.forEach((type) {
@@ -65,26 +62,19 @@ Widget buildCard(PlayingCard aCard) {
     ),
     height: 120.0,
     width: 80,
-    child: Stack(
+    child: Row(
       children: <Widget>[
-        Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Center(
-                child: Text(
-                  cardTypeToString(aCard),
-                  style: TextStyle(
-                    fontSize: 32.0,
-                    color: suitColor(aCard),
-                  ),
-                ),
-              ),
-              Container(
-                height: 40.0,
-                child: suitToImage(aCard),
-              ),
-            ],
+        Text(
+          cardTypeToString(aCard),
+          style: TextStyle(
+            fontSize: 32.0,
+            color: suitColor(aCard),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            height: 30.0,
+            child: suitToImage(aCard),
           ),
         ),
       ],

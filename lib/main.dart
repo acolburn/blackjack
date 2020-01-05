@@ -24,18 +24,21 @@ class MyHome extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        Stack(
+          overflow: Overflow.visible,
           children: <Widget>[
             buildFaceDownCard(),
-            buildCard(deck[random.nextInt(deck.length + 1)]),
+            Positioned(
+              left: 30.0,
+              child: buildCard(deck[random.nextInt(deck.length)]),
+            ),
           ],
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            buildCard(deck[random.nextInt(deck.length + 1)]),
-            buildCard(deck[random.nextInt(deck.length + 1)]),
+            buildCard(deck[random.nextInt(deck.length)]),
+            buildCard(deck[random.nextInt(deck.length)]),
           ],
         ),
       ],
