@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'playing_card.dart';
+import 'buttons.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,13 +24,14 @@ class MyHome extends StatelessWidget {
 //    deck.forEach((element) => print('${element.type} of ${element.suit}'));
     return GestureDetector(
       behavior: HitTestBehavior.translucent, //entire screen now recognized
-      onTap: () => print('Tapped'),
-      onDoubleTap: () => print('Doubled Tapped'),
-      onVerticalDragEnd: (e) => print('Vertical Swipe'),
-      onHorizontalDragEnd: (e) => print('Horizontal Swipe'),
+      onTap: () => print('Hit'),
+      onDoubleTap: () => print('Double'),
+      onVerticalDragEnd: (e) => print(''),
+      onHorizontalDragEnd: (e) => print('Stand'),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
+          //Dealer's cards
           Stack(
             overflow: Overflow.visible,
             children: <Widget>[
@@ -40,6 +42,7 @@ class MyHome extends StatelessWidget {
               ),
             ],
           ),
+          //Player's cards
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -47,64 +50,29 @@ class MyHome extends StatelessWidget {
               buildCard(deck[random.nextInt(deck.length)]),
             ],
           ),
+          //Player's decision buttons
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Material(
-                elevation: 5,
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(50),
-                child: MaterialButton(
-                  onPressed: null,
-                  height: 90,
-                  minWidth: 90,
-                  child: Text(
-                    'Hit',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+              MyButton(
+                buttonText: 'Hit',
+                buttonColor: Colors.green,
+                onPress: () => print('Hit'),
               ),
-              Material(
-                elevation: 5,
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(50),
-                child: MaterialButton(
-                  onPressed: null,
-                  height: 90,
-                  minWidth: 90,
-                  child: Text(
-                    'Stand',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+              MyButton(
+                buttonText: 'Stand',
+                buttonColor: Colors.red,
+                onPress: () => print('Stand'),
               ),
-              Material(
-                elevation: 5,
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(50),
-                child: MaterialButton(
-                  onPressed: null,
-                  height: 90,
-                  minWidth: 90,
-                  child: Text(
-                    'Double',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+              MyButton(
+                buttonText: 'Double',
+                buttonColor: Colors.blue,
+                onPress: () => print('Double'),
               ),
-              Material(
-                elevation: 5,
-                color: Colors.amber,
-                borderRadius: BorderRadius.circular(50),
-                child: MaterialButton(
-                  onPressed: null,
-                  height: 90,
-                  minWidth: 90,
-                  child: Text(
-                    'Split',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+              MyButton(
+                buttonText: 'Split',
+                buttonColor: Colors.amber,
+                onPress: () => print('Split'),
               ),
             ],
           ),
