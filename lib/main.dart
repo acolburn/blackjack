@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'playing_card.dart';
 import 'buttons.dart';
+import 'splits.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,15 +19,20 @@ class MyApp extends StatelessWidget {
 
 class MyHome extends StatelessWidget {
   final random = Random();
+
   @override
   Widget build(BuildContext context) {
     List<PlayingCard> deck = makeDeck();
+    PlayingCard playerCard1 = deck[random.nextInt(deck.length)];
+    PlayingCard playerCard2 = deck[random.nextInt(deck.length)];
+//    PlayingCard playerCard2 = playerCard1; (pair testing)
+    PlayingCard dealerCard = deck[random.nextInt(deck.length)];
+    print(testForSplit(playerCard1, playerCard2, dealerCard));
 //    deck.forEach((element) => print('${element.type} of ${element.suit}'));
     return GestureDetector(
       behavior: HitTestBehavior.translucent, //entire screen now recognized
       onTap: () => print('Hit'),
       onDoubleTap: () => print('Double'),
-      onVerticalDragEnd: (e) => print(''),
       onHorizontalDragEnd: (e) => print('Stand'),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -38,7 +44,7 @@ class MyHome extends StatelessWidget {
               buildFaceDownCard(),
               Positioned(
                 left: 30.0,
-                child: buildCard(deck[random.nextInt(deck.length)]),
+                child: buildCard(dealerCard),
               ),
             ],
           ),
@@ -46,8 +52,8 @@ class MyHome extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              buildCard(deck[random.nextInt(deck.length)]),
-              buildCard(deck[random.nextInt(deck.length)]),
+              buildCard(playerCard1),
+              buildCard(playerCard2),
             ],
           ),
           //Player's decision buttons
@@ -79,7 +85,5 @@ class MyHome extends StatelessWidget {
         ],
       ),
     );
-
-//    return Container();
   }
 }
