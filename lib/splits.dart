@@ -3,93 +3,93 @@ import 'package:blackjack/playing_card.dart';
 bool testForSplit(
     PlayingCard playerCard1, PlayingCard playerCard2, PlayingCard dealerCard) {
   bool shouldSplit = false;
-  if (playerCard1.type != playerCard2.type) {
+  if (playerCard1.value != playerCard2.value) {
     shouldSplit = false;
   } else {
-    switch (playerCard1.type) {
-      case CardType.ace:
+    switch (playerCard1.value) {
+      case CardValue.ace:
         shouldSplit = true;
         break;
-      case CardType.eight:
+      case CardValue.eight:
         shouldSplit = true;
         break;
-      case CardType.five:
+      case CardValue.five:
         shouldSplit = false;
         break;
-      case CardType.ten:
+      case CardValue.ten:
         shouldSplit = false;
         break;
-      case CardType.jack:
+      case CardValue.jack:
         shouldSplit = false;
         break;
-      case CardType.queen:
+      case CardValue.queen:
         shouldSplit = false;
         break;
-      case CardType.king:
+      case CardValue.king:
         shouldSplit = false;
         break;
-      case CardType.two:
-        if (dealerCard.type == CardType.two ||
-            dealerCard.type == CardType.three ||
-            dealerCard.type == CardType.four ||
-            dealerCard.type == CardType.five ||
-            dealerCard.type == CardType.six ||
-            dealerCard.type == CardType.seven) {
+      case CardValue.two:
+        if (dealerCard.value == CardValue.two ||
+            dealerCard.value == CardValue.three ||
+            dealerCard.value == CardValue.four ||
+            dealerCard.value == CardValue.five ||
+            dealerCard.value == CardValue.six ||
+            dealerCard.value == CardValue.seven) {
           shouldSplit = true;
         } else {
           shouldSplit = false;
         }
         break;
-      case CardType.three:
-        if (dealerCard.type == CardType.two ||
-            dealerCard.type == CardType.three ||
-            dealerCard.type == CardType.four ||
-            dealerCard.type == CardType.five ||
-            dealerCard.type == CardType.six ||
-            dealerCard.type == CardType.seven) {
+      case CardValue.three:
+        if (dealerCard.value == CardValue.two ||
+            dealerCard.value == CardValue.three ||
+            dealerCard.value == CardValue.four ||
+            dealerCard.value == CardValue.five ||
+            dealerCard.value == CardValue.six ||
+            dealerCard.value == CardValue.seven) {
           shouldSplit = true;
         } else {
           shouldSplit = false;
         }
         break;
-      case CardType.seven:
-        if (dealerCard.type == CardType.two ||
-            dealerCard.type == CardType.three ||
-            dealerCard.type == CardType.four ||
-            dealerCard.type == CardType.five ||
-            dealerCard.type == CardType.six ||
-            dealerCard.type == CardType.seven) {
+      case CardValue.seven:
+        if (dealerCard.value == CardValue.two ||
+            dealerCard.value == CardValue.three ||
+            dealerCard.value == CardValue.four ||
+            dealerCard.value == CardValue.five ||
+            dealerCard.value == CardValue.six ||
+            dealerCard.value == CardValue.seven) {
           shouldSplit = true;
         } else {
           shouldSplit = false;
         }
         break;
-      case CardType.six:
-        if (dealerCard.type == CardType.two ||
-            dealerCard.type == CardType.three ||
-            dealerCard.type == CardType.four ||
-            dealerCard.type == CardType.five ||
-            dealerCard.type == CardType.six) {
+      case CardValue.six:
+        if (dealerCard.value == CardValue.two ||
+            dealerCard.value == CardValue.three ||
+            dealerCard.value == CardValue.four ||
+            dealerCard.value == CardValue.five ||
+            dealerCard.value == CardValue.six) {
           shouldSplit = true;
         } else {
           shouldSplit = false;
         }
         break;
-      case CardType.four:
-        if (dealerCard.type == CardType.four ||
-            dealerCard.type == CardType.five ||
-            dealerCard.type == CardType.six) {
+      case CardValue.four:
+        if (dealerCard.value == CardValue.four ||
+            dealerCard.value == CardValue.five ||
+            dealerCard.value == CardValue.six) {
           shouldSplit = true;
         } else {
           shouldSplit = false;
         }
         break;
-      case CardType.nine:
-        if (dealerCard.type == CardType.seven ||
-            dealerCard.type == CardType.ten ||
-            dealerCard.type == CardType.jack ||
-            dealerCard.type == CardType.queen ||
-            dealerCard.type == CardType.king) {
+      case CardValue.nine:
+        if (dealerCard.value == CardValue.seven ||
+            dealerCard.value == CardValue.ten ||
+            dealerCard.value == CardValue.jack ||
+            dealerCard.value == CardValue.queen ||
+            dealerCard.value == CardValue.king) {
           shouldSplit = false;
         } else {
           shouldSplit = true;

@@ -4,6 +4,8 @@ import 'playing_card.dart';
 import 'buttons.dart';
 import 'splits.dart';
 
+enum Decision { hit, stand, double, split }
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -26,13 +28,14 @@ class _MyHomeState extends State<MyHome> {
   final random = Random();
 
   PlayingCard playerCard1;
-
   PlayingCard playerCard2;
-
   PlayingCard dealerCard;
+  Decision playerDecision;
+  Decision computerDecision;
 
   void dealHand() {
     List<PlayingCard> deck = makeDeck();
+    //    deck.forEach((element) => print('${element.type} of ${element.suit}'));
     playerCard1 = deck[random.nextInt(deck.length)];
     playerCard2 = deck[random.nextInt(deck.length)];
 //    PlayingCard playerCard2 = playerCard1; (for pair testing)
@@ -42,8 +45,17 @@ class _MyHomeState extends State<MyHome> {
   @override
   Widget build(BuildContext context) {
     dealHand();
-    print(testForSplit(playerCard1, playerCard2, dealerCard));
-//    deck.forEach((element) => print('${element.type} of ${element.suit}'));
+    //Pair?
+    if (playerCard1.value == playerCard2.value) {
+      if (testForSplit(playerCard1, playerCard2, dealerCard)) {
+        computerDecision = Decision.split;
+      }
+    }
+    //Ace?
+    //Double?
+    //Must be hard hand
+
+    //Build UI
     return GestureDetector(
       behavior: HitTestBehavior.translucent, //entire screen now recognized
       onTap: () {

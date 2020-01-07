@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 enum CardSuit { S, H, D, C }
 
-enum CardType {
+enum CardValue {
   ace,
   two,
   three,
@@ -20,19 +20,18 @@ enum CardType {
 
 class PlayingCard {
   CardSuit suit;
-  CardType type;
-  bool faceUp;
+  CardValue value;
 
-  PlayingCard({@required this.type, @required this.suit, this.faceUp = true});
+  PlayingCard({@required this.value, @required this.suit});
 }
 
 List<PlayingCard> makeDeck() {
   List<PlayingCard> deck = [];
   // make standard 52 card deck
   CardSuit.values.forEach((suit) {
-    CardType.values.forEach((type) {
+    CardValue.values.forEach((type) {
       deck.add(PlayingCard(
-        type: type,
+        value: type,
         suit: suit,
       ));
     });
@@ -65,7 +64,7 @@ Widget buildCard(PlayingCard aCard) {
     child: Row(
       children: <Widget>[
         Text(
-          cardTypeToString(aCard),
+          cardValueToString(aCard),
           style: TextStyle(
             fontSize: 32.0,
             color: suitColor(aCard),
@@ -90,33 +89,33 @@ Color suitColor(PlayingCard aCard) {
   }
 }
 
-String cardTypeToString(PlayingCard aCard) {
-  switch (aCard.type) {
-    case CardType.ace:
+String cardValueToString(PlayingCard aCard) {
+  switch (aCard.value) {
+    case CardValue.ace:
       return "A";
-    case CardType.two:
+    case CardValue.two:
       return "2";
-    case CardType.three:
+    case CardValue.three:
       return "3";
-    case CardType.four:
+    case CardValue.four:
       return "4";
-    case CardType.five:
+    case CardValue.five:
       return "5";
-    case CardType.six:
+    case CardValue.six:
       return "6";
-    case CardType.seven:
+    case CardValue.seven:
       return "7";
-    case CardType.eight:
+    case CardValue.eight:
       return "8";
-    case CardType.nine:
+    case CardValue.nine:
       return "9";
-    case CardType.ten:
+    case CardValue.ten:
       return "10";
-    case CardType.jack:
+    case CardValue.jack:
       return "J";
-    case CardType.queen:
+    case CardValue.queen:
       return "Q";
-    case CardType.king:
+    case CardValue.king:
       return "K";
     default:
       return "";
