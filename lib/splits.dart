@@ -1,32 +1,41 @@
 import 'package:blackjack/playing_card.dart';
+import 'main.dart';
 
-bool testForSplit(
+Decision testForSplit(
     PlayingCard playerCard1, PlayingCard playerCard2, PlayingCard dealerCard) {
-  bool shouldSplit = false;
+  Decision result = Decision.none;
   if (playerCard1.value != playerCard2.value) {
-    shouldSplit = false;
+    result = Decision.none;
   } else {
     switch (playerCard1.value) {
       case CardValue.ace:
-        shouldSplit = true;
+        result = Decision.split;
         break;
       case CardValue.eight:
-        shouldSplit = true;
+        result = Decision.split;
         break;
       case CardValue.five:
-        shouldSplit = false;
+        if (dealerCard.value == CardValue.ten ||
+            dealerCard.value == CardValue.jack ||
+            dealerCard.value == CardValue.queen ||
+            dealerCard.value == CardValue.king ||
+            dealerCard.value == CardValue.ace) {
+          result = Decision.hit;
+        } else {
+          result = Decision.double;
+        }
         break;
       case CardValue.ten:
-        shouldSplit = false;
+        result = Decision.stand;
         break;
       case CardValue.jack:
-        shouldSplit = false;
+        result = Decision.stand;
         break;
       case CardValue.queen:
-        shouldSplit = false;
+        result = Decision.stand;
         break;
       case CardValue.king:
-        shouldSplit = false;
+        result = Decision.stand;
         break;
       case CardValue.two:
         if (dealerCard.value == CardValue.two ||
@@ -35,9 +44,9 @@ bool testForSplit(
             dealerCard.value == CardValue.five ||
             dealerCard.value == CardValue.six ||
             dealerCard.value == CardValue.seven) {
-          shouldSplit = true;
+          result = Decision.split;
         } else {
-          shouldSplit = false;
+          result = Decision.hit;
         }
         break;
       case CardValue.three:
@@ -47,9 +56,9 @@ bool testForSplit(
             dealerCard.value == CardValue.five ||
             dealerCard.value == CardValue.six ||
             dealerCard.value == CardValue.seven) {
-          shouldSplit = true;
+          result = Decision.split;
         } else {
-          shouldSplit = false;
+          result = Decision.hit;
         }
         break;
       case CardValue.seven:
@@ -59,9 +68,9 @@ bool testForSplit(
             dealerCard.value == CardValue.five ||
             dealerCard.value == CardValue.six ||
             dealerCard.value == CardValue.seven) {
-          shouldSplit = true;
+          result = Decision.split;
         } else {
-          shouldSplit = false;
+          result = Decision.hit;
         }
         break;
       case CardValue.six:
@@ -70,18 +79,17 @@ bool testForSplit(
             dealerCard.value == CardValue.four ||
             dealerCard.value == CardValue.five ||
             dealerCard.value == CardValue.six) {
-          shouldSplit = true;
+          result = Decision.split;
         } else {
-          shouldSplit = false;
+          result = Decision.hit;
         }
         break;
       case CardValue.four:
-        if (dealerCard.value == CardValue.four ||
-            dealerCard.value == CardValue.five ||
+        if (dealerCard.value == CardValue.five ||
             dealerCard.value == CardValue.six) {
-          shouldSplit = true;
+          result = Decision.split;
         } else {
-          shouldSplit = false;
+          result = Decision.hit;
         }
         break;
       case CardValue.nine:
@@ -89,15 +97,16 @@ bool testForSplit(
             dealerCard.value == CardValue.ten ||
             dealerCard.value == CardValue.jack ||
             dealerCard.value == CardValue.queen ||
-            dealerCard.value == CardValue.king) {
-          shouldSplit = false;
+            dealerCard.value == CardValue.king ||
+            dealerCard.value == CardValue.ace) {
+          result = Decision.stand;
         } else {
-          shouldSplit = true;
+          result = Decision.split;
         }
         break;
       default:
-        shouldSplit = false;
+        result = Decision.none;
     }
   }
-  return shouldSplit;
+  return result;
 }

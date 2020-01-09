@@ -4,7 +4,7 @@ import 'playing_card.dart';
 import 'buttons.dart';
 import 'splits.dart';
 
-enum Decision { hit, stand, double, split }
+enum Decision { hit, stand, double, split, none }
 
 void main() => runApp(MyApp());
 
@@ -31,26 +31,27 @@ class _MyHomeState extends State<MyHome> {
   PlayingCard playerCard2;
   PlayingCard dealerCard;
   Decision playerDecision;
-  Decision computerDecision;
+  Decision computerDecision = Decision.none;
 
   void dealHand() {
     List<PlayingCard> deck = makeDeck();
     //    deck.forEach((element) => print('${element.type} of ${element.suit}'));
     playerCard1 = deck[random.nextInt(deck.length)];
-    playerCard2 = deck[random.nextInt(deck.length)];
-//    PlayingCard playerCard2 = playerCard1; (for pair testing)
+//    playerCard2 = deck[random.nextInt(deck.length)];
+    playerCard2 = playerCard1; //(for pair testing)
     dealerCard = deck[random.nextInt(deck.length)];
   }
 
   @override
   Widget build(BuildContext context) {
     dealHand();
-    //Pair?
+    //It's a pair. Should player split?
     if (playerCard1.value == playerCard2.value) {
-      if (testForSplit(playerCard1, playerCard2, dealerCard)) {
-        computerDecision = Decision.split;
-      }
+      computerDecision = testForSplit(playerCard1, playerCard2, dealerCard);
+      print(
+          'For pair of ${playerCard1.value}, player should $computerDecision');
     }
+
     //Ace?
     //Double?
     //Must be hard hand
@@ -111,6 +112,11 @@ class _MyHomeState extends State<MyHome> {
                   });
                 },
               ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
               MyButton(
                 buttonText: 'Double',
                 buttonColor: Colors.blue,

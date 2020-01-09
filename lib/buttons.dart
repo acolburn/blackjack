@@ -20,8 +20,8 @@ class MyButton extends MaterialButton {
         borderRadius: BorderRadius.circular(50),
       ),
       onPressed: onPress,
-      height: 90,
-      minWidth: 90,
+      height: 100,
+      minWidth: 100,
       child: Text(
         buttonText,
         style: TextStyle(color: Colors.white),
