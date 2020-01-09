@@ -1,7 +1,7 @@
 import 'package:blackjack/playing_card.dart';
 import 'main.dart';
 
-Decision testForSplit(
+Decision processSplit(
     PlayingCard playerCard1, PlayingCard playerCard2, PlayingCard dealerCard) {
   Decision result = Decision.none;
   if (playerCard1.value != playerCard2.value) {

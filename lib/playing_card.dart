@@ -89,6 +89,48 @@ Color suitColor(PlayingCard aCard) {
   }
 }
 
+int cardValueToNumber(PlayingCard aCard) {
+  switch (aCard.value) {
+    case CardValue.ace:
+      return 11;
+    case CardValue.two:
+      return 2;
+    case CardValue.three:
+      return 3;
+    case CardValue.four:
+      return 4;
+    case CardValue.five:
+      return 5;
+    case CardValue.six:
+      return 6;
+    case CardValue.seven:
+      return 7;
+    case CardValue.eight:
+      return 8;
+    case CardValue.nine:
+      return 9;
+    case CardValue.ten:
+      return 10;
+    case CardValue.jack:
+      return 10;
+    case CardValue.queen:
+      return 10;
+    case CardValue.king:
+      return 10;
+    default:
+      return 0;
+  }
+}
+
+int computeHandValue(PlayingCard card1, PlayingCard card2) {
+  int total = 0;
+  total = cardValueToNumber(card1) + cardValueToNumber(card2);
+  if (total > 21) {
+    total = total - 10;
+  } //soft hand, make A=1 instead of 11. Only happens with pair of aces.
+  return total;
+}
+
 String cardValueToString(PlayingCard aCard) {
   switch (aCard.value) {
     case CardValue.ace:

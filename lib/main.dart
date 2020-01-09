@@ -1,8 +1,11 @@
+import 'package:blackjack/doubles.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'playing_card.dart';
 import 'buttons.dart';
 import 'splits.dart';
+import 'soft_hands.dart';
+import 'hard_hands.dart';
 
 enum Decision { hit, stand, double, split, none }
 
@@ -30,31 +33,38 @@ class _MyHomeState extends State<MyHome> {
   PlayingCard playerCard1;
   PlayingCard playerCard2;
   PlayingCard dealerCard;
-  Decision playerDecision;
+  Decision playerDecision = Decision.none;
   Decision computerDecision = Decision.none;
 
   void dealHand() {
     List<PlayingCard> deck = makeDeck();
     //    deck.forEach((element) => print('${element.type} of ${element.suit}'));
     playerCard1 = deck[random.nextInt(deck.length)];
-//    playerCard2 = deck[random.nextInt(deck.length)];
-    playerCard2 = playerCard1; //(for pair testing)
+    playerCard2 = deck[random.nextInt(deck.length)];
+//    playerCard2 = playerCard1; //(for pair testing)
+//    playerCard2 = deck[0]; //(for soft hand testing)
     dealerCard = deck[random.nextInt(deck.length)];
   }
 
   @override
   Widget build(BuildContext context) {
     dealHand();
-    //It's a pair. Should player split?
+    //If there's a pair.
     if (playerCard1.value == playerCard2.value) {
-      computerDecision = testForSplit(playerCard1, playerCard2, dealerCard);
-      print(
-          'For pair of ${playerCard1.value}, player should $computerDecision');
+      computerDecision = processSplit(playerCard1, playerCard2, dealerCard);
+    } else
+    //If there's an ace.
+    if (playerCard1.value == CardValue.ace ||
+        playerCard2.value == CardValue.ace) {
+      computerDecision = processSoftHand(playerCard1, playerCard2, dealerCard);
+    } else if (computerDecision == Decision.none) {
+      //Check for doubles
+      computerDecision = checkForDoubles(playerCard1, playerCard2, dealerCard);
+    } else {
+      //It's your basic hard hand, totalling <=8 or 12-20
+      computerDecision = processHardHand(playerCard1, playerCard2, dealerCard);
     }
-
-    //Ace?
-    //Double?
-    //Must be hard hand
+    print('Player should $computerDecision');
 
     //Build UI
     return GestureDetector(
@@ -64,8 +74,8 @@ class _MyHomeState extends State<MyHome> {
           dealHand();
         });
       },
-      onDoubleTap: () => print('Double'),
-      onHorizontalDragEnd: (e) => print('Stand'),
+//      onDoubleTap: () => print('Double'),
+//      onHorizontalDragEnd: (e) => print('Stand'),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -97,7 +107,7 @@ class _MyHomeState extends State<MyHome> {
                 buttonColor: Colors.green,
                 onPress: () {
                   setState(() {
-                    print('Hit');
+//                    print('Hit');
                     dealHand();
                   });
                 },
@@ -107,7 +117,7 @@ class _MyHomeState extends State<MyHome> {
                 buttonColor: Colors.red,
                 onPress: () {
                   setState(() {
-                    print('Stand');
+//                    print('Stand');
                     dealHand();
                   });
                 },
@@ -122,7 +132,7 @@ class _MyHomeState extends State<MyHome> {
                 buttonColor: Colors.blue,
                 onPress: () {
                   setState(() {
-                    print('Double');
+//                    print('Double');
                     dealHand();
                   });
                 },
@@ -132,7 +142,7 @@ class _MyHomeState extends State<MyHome> {
                 buttonColor: Colors.amber,
                 onPress: () {
                   setState(() {
-                    print('Split');
+//                    print('Split');
                     dealHand();
                   });
                 },
