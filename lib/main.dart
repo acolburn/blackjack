@@ -6,6 +6,7 @@ import 'buttons.dart';
 import 'splits.dart';
 import 'soft_hands.dart';
 import 'hard_hands.dart';
+import 'package:flushbar/flushbar.dart';
 
 enum Decision { hit, stand, double, split, none }
 
@@ -33,6 +34,7 @@ class _MyHomeState extends State<MyHome> {
   PlayingCard playerCard1;
   PlayingCard playerCard2;
   PlayingCard dealerCard;
+  int handValue;
   Decision playerDecision = Decision.none;
   Decision computerDecision = Decision.none;
 
@@ -49,6 +51,7 @@ class _MyHomeState extends State<MyHome> {
   @override
   Widget build(BuildContext context) {
     dealHand();
+    handValue = computeHandValue(playerCard1, playerCard2);
     //If there's a pair.
     if (playerCard1.value == playerCard2.value) {
       computerDecision = processSplit(playerCard1, playerCard2, dealerCard);
@@ -57,14 +60,15 @@ class _MyHomeState extends State<MyHome> {
     if (playerCard1.value == CardValue.ace ||
         playerCard2.value == CardValue.ace) {
       computerDecision = processSoftHand(playerCard1, playerCard2, dealerCard);
-    } else if (computerDecision == Decision.none) {
+    } else if (handValue == 9 || handValue == 10 || handValue == 11) {
       //Check for doubles
       computerDecision = checkForDoubles(playerCard1, playerCard2, dealerCard);
     } else {
       //It's your basic hard hand, totalling <=8 or 12-20
       computerDecision = processHardHand(playerCard1, playerCard2, dealerCard);
     }
-    print('Player should $computerDecision');
+
+//    print('Player should $computerDecision');
 
     //Build UI
     return GestureDetector(
@@ -74,8 +78,8 @@ class _MyHomeState extends State<MyHome> {
           dealHand();
         });
       },
-//      onDoubleTap: () => print('Double'),
-//      onHorizontalDragEnd: (e) => print('Stand'),
+      onDoubleTap: () => print('Double'),
+      onHorizontalDragEnd: (e) => print('Stand'),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -106,8 +110,13 @@ class _MyHomeState extends State<MyHome> {
                 buttonText: 'Hit',
                 buttonColor: Colors.green,
                 onPress: () {
+                  playerDecision = Decision.hit;
+                  Flushbar(
+                    title: (playerDecision == computerDecision).toString(),
+                    message: "Player should $computerDecision",
+                    duration: Duration(seconds: 1),
+                  )..show(context);
                   setState(() {
-//                    print('Hit');
                     dealHand();
                   });
                 },
@@ -116,8 +125,13 @@ class _MyHomeState extends State<MyHome> {
                 buttonText: 'Stand',
                 buttonColor: Colors.red,
                 onPress: () {
+                  playerDecision = Decision.stand;
+                  Flushbar(
+                    title: (playerDecision == computerDecision).toString(),
+                    message: "Player should $computerDecision",
+                    duration: Duration(seconds: 1),
+                  )..show(context);
                   setState(() {
-//                    print('Stand');
                     dealHand();
                   });
                 },
@@ -131,8 +145,13 @@ class _MyHomeState extends State<MyHome> {
                 buttonText: 'Double',
                 buttonColor: Colors.blue,
                 onPress: () {
+                  playerDecision = Decision.double;
+                  Flushbar(
+                    title: (playerDecision == computerDecision).toString(),
+                    message: "Player should $computerDecision",
+                    duration: Duration(seconds: 1),
+                  )..show(context);
                   setState(() {
-//                    print('Double');
                     dealHand();
                   });
                 },
@@ -141,8 +160,13 @@ class _MyHomeState extends State<MyHome> {
                 buttonText: 'Split',
                 buttonColor: Colors.amber,
                 onPress: () {
+                  playerDecision = Decision.split;
+                  Flushbar(
+                    title: (playerDecision == computerDecision).toString(),
+                    message: "Player should $computerDecision",
+                    duration: Duration(seconds: 1),
+                  )..show(context);
                   setState(() {
-//                    print('Split');
                     dealHand();
                   });
                 },

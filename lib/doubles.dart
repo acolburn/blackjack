@@ -24,8 +24,7 @@ Decision checkForDoubles(
   } else if (total == 11) {
     //Always double
     result = Decision.double;
-  } else
-    result = Decision.none;
+  }
 
   return result;
 }
