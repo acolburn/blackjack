@@ -74,12 +74,28 @@ class _MyHomeState extends State<MyHome> {
     return GestureDetector(
       behavior: HitTestBehavior.translucent, //entire screen now recognized
       onTap: () {
+        playerDecision = Decision.hit;
+        Flushbar(
+          title: (playerDecision == computerDecision).toString(),
+          message: "Player should $computerDecision",
+          duration: Duration(milliseconds: 800),
+        )..show(context);
         setState(() {
           dealHand();
         });
       },
-      onDoubleTap: () => print('Double'),
-      onHorizontalDragEnd: (e) => print('Stand'),
+//      onDoubleTap: () => print('Double'),
+      onHorizontalDragEnd: (e) {
+        playerDecision = Decision.stand;
+        Flushbar(
+          title: (playerDecision == computerDecision).toString(),
+          message: "Player should $computerDecision",
+          duration: Duration(milliseconds: 800),
+        )..show(context);
+        setState(() {
+          dealHand();
+        });
+      },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
