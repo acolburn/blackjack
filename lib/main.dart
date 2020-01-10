@@ -7,6 +7,7 @@ import 'splits.dart';
 import 'soft_hands.dart';
 import 'hard_hands.dart';
 import 'package:flushbar/flushbar.dart';
+import 'flushbar.dart';
 
 enum Decision { hit, stand, double, split, none }
 
@@ -75,11 +76,9 @@ class _MyHomeState extends State<MyHome> {
       behavior: HitTestBehavior.translucent, //entire screen now recognized
       onTap: () {
         playerDecision = Decision.hit;
-        Flushbar(
-          title: (playerDecision == computerDecision).toString(),
-          message: "Player should $computerDecision",
-          duration: Duration(milliseconds: 800),
-        )..show(context);
+        if (playerDecision != computerDecision) {
+          displayFlushbar(context, computerDecision);
+        }
         setState(() {
           dealHand();
         });
@@ -87,11 +86,9 @@ class _MyHomeState extends State<MyHome> {
 //      onDoubleTap: () => print('Double'),
       onHorizontalDragEnd: (e) {
         playerDecision = Decision.stand;
-        Flushbar(
-          title: (playerDecision == computerDecision).toString(),
-          message: "Player should $computerDecision",
-          duration: Duration(milliseconds: 800),
-        )..show(context);
+        if (playerDecision != computerDecision) {
+          displayFlushbar(context, computerDecision);
+        }
         setState(() {
           dealHand();
         });
