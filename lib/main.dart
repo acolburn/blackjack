@@ -6,7 +6,6 @@ import 'buttons.dart';
 import 'splits.dart';
 import 'soft_hands.dart';
 import 'hard_hands.dart';
-import 'package:flushbar/flushbar.dart';
 import 'flushbar.dart';
 
 enum Decision { hit, stand, double, split, none }
@@ -38,10 +37,12 @@ class _MyHomeState extends State<MyHome> {
   int handValue;
   Decision playerDecision = Decision.none;
   Decision computerDecision = Decision.none;
+  int correct = 0;
+  int incorrect = 0;
 
   void dealHand() {
     List<PlayingCard> deck = makeDeck();
-    //    deck.forEach((element) => print('${element.type} of ${element.suit}'));
+//    deck.forEach((element) => print('${element.type} of ${element.suit}'));
     playerCard1 = deck[random.nextInt(deck.length)];
     playerCard2 = deck[random.nextInt(deck.length)];
 //    playerCard2 = playerCard1; //(for pair testing)
@@ -52,114 +53,149 @@ class _MyHomeState extends State<MyHome> {
   @override
   Widget build(BuildContext context) {
     dealHand();
-    handValue = computeHandValue(playerCard1, playerCard2);
-    //If there's a pair.
-    if (playerCard1.value == playerCard2.value) {
-      computerDecision = processSplit(playerCard1, playerCard2, dealerCard);
-    } else
-    //If there's an ace.
-    if (playerCard1.value == CardValue.ace ||
-        playerCard2.value == CardValue.ace) {
-      computerDecision = processSoftHand(playerCard1, playerCard2, dealerCard);
-    } else if (handValue == 9 || handValue == 10 || handValue == 11) {
-      //Check for doubles
-      computerDecision = checkForDoubles(playerCard1, playerCard2, dealerCard);
-    } else {
-      //It's your basic hard hand, totalling <=8 or 12-20
-      computerDecision = processHardHand(playerCard1, playerCard2, dealerCard);
-    }
-
-//    print('Player should $computerDecision');
+    makeComputerDecision();
 
     //Build UI
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent, //entire screen now recognized
-      onTap: () {
-        playerDecision = Decision.hit;
-        processDecision(context);
-      },
-      onDoubleTap: () {
-        playerDecision = Decision.double;
-        processDecision(context);
-      },
-      onHorizontalDragEnd: (e) {
-        playerDecision = Decision.stand;
-        processDecision(context);
-      },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          //Dealer's cards
-          Stack(
-            overflow: Overflow.visible,
-            children: <Widget>[
-              buildFaceDownCard(),
-              Positioned(
-                left: 30.0,
-                child: buildCard(dealerCard),
-              ),
-            ],
-          ),
-          //Player's cards
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              buildCard(playerCard1),
-              buildCard(playerCard2),
-            ],
-          ),
-          //Player's decision buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              MyButton(
-                buttonText: 'Hit',
-                buttonColor: Colors.green,
-                onPress: () {
-                  playerDecision = Decision.hit;
-                  processDecision(context);
-                },
-              ),
-              MyButton(
-                buttonText: 'Stand',
-                buttonColor: Colors.red,
-                onPress: () {
-                  playerDecision = Decision.stand;
-                  processDecision(context);
-                },
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              MyButton(
-                buttonText: 'Double',
-                buttonColor: Colors.blue,
-                onPress: () {
-                  playerDecision = Decision.double;
-                  processDecision(context);
-                },
-              ),
-              MyButton(
-                buttonText: 'Split',
-                buttonColor: Colors.amber,
-                onPress: () {
-                  playerDecision = Decision.split;
-                  processDecision(context);
-                },
-              ),
-            ],
-          ),
-        ],
+    return Scaffold(
+      backgroundColor: Colors.green[500],
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent, //entire screen now recognized
+        onTap: () {
+          processPlayerDecision(context, Decision.hit);
+        },
+        onDoubleTap: () {
+          processPlayerDecision(context, Decision.double);
+        },
+        onHorizontalDragEnd: (e) {
+          processPlayerDecision(context, Decision.stand);
+        },
+
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                //Display #correct and #incorrect
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        padding: EdgeInsets.all(7.0),
+                        width: 80,
+                        child: Text('Correct: $correct',
+                            style: TextStyle(fontSize: 12.0)),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        padding: EdgeInsets.all(7.0),
+                        width: 80,
+                        child: Text('Incorrect: $incorrect',
+                            style: TextStyle(fontSize: 12.0)),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(flex: 1, child: Container()),
+                //Dealer's cards
+                Expanded(
+                  flex: 4,
+                  child: Stack(
+                    overflow: Overflow.visible,
+                    children: <Widget>[
+                      buildFaceDownCard(),
+                      Positioned(
+                        left: 30.0,
+                        child: buildCard(dealerCard),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            //Player's cards
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                buildCard(playerCard1),
+                buildCard(playerCard2),
+              ],
+            ),
+            //Player's decision buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                MyButton(
+                  buttonText: 'Hit',
+                  buttonColor: Colors.green[600],
+                  onPress: () {
+                    processPlayerDecision(context, Decision.hit);
+                  },
+                ),
+                MyButton(
+                  buttonText: 'Stand',
+                  buttonColor: Colors.red,
+                  onPress: () {
+                    processPlayerDecision(context, Decision.stand);
+                  },
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                MyButton(
+                  buttonText: 'Double',
+                  buttonColor: Colors.blue,
+                  onPress: () {
+                    processPlayerDecision(context, Decision.double);
+                  },
+                ),
+                MyButton(
+                  buttonText: 'Split',
+                  buttonColor: Colors.amber,
+                  onPress: () {
+                    processPlayerDecision(context, Decision.split);
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  void processDecision(BuildContext context) {
-    if (playerDecision != computerDecision) {
-      displayFlushbar(context, computerDecision);
+  void makeComputerDecision() {
+    handValue = computeHandValue(playerCard1, playerCard2);
+    //If there's a pair.
+    if (playerCard1.value == playerCard2.value) {
+      computerDecision = processSplit(playerCard1, playerCard2, dealerCard);
     }
+    //If there's an ace.
+    else if (playerCard1.value == CardValue.ace ||
+        playerCard2.value == CardValue.ace) {
+      computerDecision = processSoftHand(playerCard1, playerCard2, dealerCard);
+    }
+    //Check for doubles
+    else if (handValue == 9 || handValue == 10 || handValue == 11) {
+      computerDecision = checkForDoubles(playerCard1, playerCard2, dealerCard);
+    } else
+    //It's your basic hard hand, totalling <=8 or 12-20
+    {
+      computerDecision = processHardHand(playerCard1, playerCard2, dealerCard);
+    }
+  }
+
+  void processPlayerDecision(BuildContext context, Decision playerDecision) {
+    if (playerDecision != computerDecision) {
+      incorrect++;
+      displayFlushbar(context, computerDecision);
+    } else
+      correct++;
     setState(() {
       dealHand();
     });
