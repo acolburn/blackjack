@@ -76,22 +76,15 @@ class _MyHomeState extends State<MyHome> {
       behavior: HitTestBehavior.translucent, //entire screen now recognized
       onTap: () {
         playerDecision = Decision.hit;
-        if (playerDecision != computerDecision) {
-          displayFlushbar(context, computerDecision);
-        }
-        setState(() {
-          dealHand();
-        });
+        processDecision(context);
       },
-//      onDoubleTap: () => print('Double'),
+      onDoubleTap: () {
+        playerDecision = Decision.double;
+        processDecision(context);
+      },
       onHorizontalDragEnd: (e) {
         playerDecision = Decision.stand;
-        if (playerDecision != computerDecision) {
-          displayFlushbar(context, computerDecision);
-        }
-        setState(() {
-          dealHand();
-        });
+        processDecision(context);
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -124,14 +117,7 @@ class _MyHomeState extends State<MyHome> {
                 buttonColor: Colors.green,
                 onPress: () {
                   playerDecision = Decision.hit;
-                  Flushbar(
-                    title: (playerDecision == computerDecision).toString(),
-                    message: "Player should $computerDecision",
-                    duration: Duration(seconds: 1),
-                  )..show(context);
-                  setState(() {
-                    dealHand();
-                  });
+                  processDecision(context);
                 },
               ),
               MyButton(
@@ -139,14 +125,7 @@ class _MyHomeState extends State<MyHome> {
                 buttonColor: Colors.red,
                 onPress: () {
                   playerDecision = Decision.stand;
-                  Flushbar(
-                    title: (playerDecision == computerDecision).toString(),
-                    message: "Player should $computerDecision",
-                    duration: Duration(seconds: 1),
-                  )..show(context);
-                  setState(() {
-                    dealHand();
-                  });
+                  processDecision(context);
                 },
               ),
             ],
@@ -159,14 +138,7 @@ class _MyHomeState extends State<MyHome> {
                 buttonColor: Colors.blue,
                 onPress: () {
                   playerDecision = Decision.double;
-                  Flushbar(
-                    title: (playerDecision == computerDecision).toString(),
-                    message: "Player should $computerDecision",
-                    duration: Duration(seconds: 1),
-                  )..show(context);
-                  setState(() {
-                    dealHand();
-                  });
+                  processDecision(context);
                 },
               ),
               MyButton(
@@ -174,14 +146,7 @@ class _MyHomeState extends State<MyHome> {
                 buttonColor: Colors.amber,
                 onPress: () {
                   playerDecision = Decision.split;
-                  Flushbar(
-                    title: (playerDecision == computerDecision).toString(),
-                    message: "Player should $computerDecision",
-                    duration: Duration(seconds: 1),
-                  )..show(context);
-                  setState(() {
-                    dealHand();
-                  });
+                  processDecision(context);
                 },
               ),
             ],
@@ -189,5 +154,14 @@ class _MyHomeState extends State<MyHome> {
         ],
       ),
     );
+  }
+
+  void processDecision(BuildContext context) {
+    if (playerDecision != computerDecision) {
+      displayFlushbar(context, computerDecision);
+    }
+    setState(() {
+      dealHand();
+    });
   }
 }
