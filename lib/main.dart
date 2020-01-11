@@ -83,17 +83,25 @@ class _MyHomeState extends State<MyHome> {
                     children: <Widget>[
                       Container(
                         decoration: BoxDecoration(border: Border.all()),
-                        padding: EdgeInsets.all(7.0),
-                        width: 80,
+                        padding: EdgeInsets.all(6.0),
+                        width: 90,
                         child: Text('Correct: $correct',
-                            style: TextStyle(fontSize: 12.0)),
+                            style: TextStyle(fontSize: 10)),
                       ),
                       Container(
                         decoration: BoxDecoration(border: Border.all()),
-                        padding: EdgeInsets.all(7.0),
-                        width: 80,
+                        padding: EdgeInsets.all(6.0),
+                        width: 90,
                         child: Text('Incorrect: $incorrect',
-                            style: TextStyle(fontSize: 12.0)),
+                            style: TextStyle(fontSize: 10)),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        padding: EdgeInsets.all(6.0),
+                        width: 90,
+                        child: Text(
+                            '${((correct / (correct + incorrect)) * 100).round()}% correct',
+                            style: TextStyle(fontSize: 10)),
                       ),
                     ],
                   ),
