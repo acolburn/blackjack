@@ -108,6 +108,23 @@ class _MyHomeState extends State<MyHome> {
                         child: Text('$percentCorrect% correct',
                             style: TextStyle(fontSize: 10)),
                       ),
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        padding: EdgeInsets.all(6.0),
+                        width: 90,
+                        height: 40,
+                        child: RaisedButton(
+                          color: Colors.grey,
+                          child: Text('Reset', style: TextStyle(fontSize: 11)),
+                          onPressed: () {
+                            setState(() {
+                              correct = 0;
+                              incorrect = 0;
+                              percentCorrect = 100;
+                            });
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
