@@ -1,5 +1,6 @@
 import 'package:blackjack/doubles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:math';
 import 'playing_card.dart';
 import 'buttons.dart';
@@ -16,7 +17,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    //Must use app in portrait mode
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Blackjack Trainer',
       home: MyHome(),
     );
@@ -39,6 +44,7 @@ class _MyHomeState extends State<MyHome> {
   Decision computerDecision = Decision.none;
   int correct = 0;
   int incorrect = 0;
+  int percentCorrect = 0;
 
   void dealHand() {
     List<PlayingCard> deck = makeDeck();
@@ -99,8 +105,7 @@ class _MyHomeState extends State<MyHome> {
                         decoration: BoxDecoration(border: Border.all()),
                         padding: EdgeInsets.all(6.0),
                         width: 90,
-                        child: Text(
-                            '${((correct / (correct + incorrect)) * 100).round()}% correct',
+                        child: Text('$percentCorrect% correct',
                             style: TextStyle(fontSize: 10)),
                       ),
                     ],
@@ -201,9 +206,11 @@ class _MyHomeState extends State<MyHome> {
   void processPlayerDecision(BuildContext context, Decision playerDecision) {
     if (playerDecision != computerDecision) {
       incorrect++;
+      percentCorrect = ((correct / (correct + incorrect)) * 100).round();
       displayFlushbar(context, computerDecision);
     } else
       correct++;
+    percentCorrect = ((correct / (correct + incorrect)) * 100).round();
     setState(() {
       dealHand();
     });
