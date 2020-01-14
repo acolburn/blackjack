@@ -224,7 +224,8 @@ class _MyHomeState extends State<MyHome> {
     if (playerDecision != computerDecision) {
       incorrect++;
       percentCorrect = ((correct / (correct + incorrect)) * 100).round();
-      displayFlushbar(context, computerDecision);
+      displayFlushbar(
+          context, computerDecision, playerCard1, playerCard2, dealerCard);
     } else
       correct++;
     percentCorrect = ((correct / (correct + incorrect)) * 100).round();
