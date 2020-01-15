@@ -8,6 +8,7 @@ import 'splits.dart';
 import 'soft_hands.dart';
 import 'hard_hands.dart';
 import 'flushbar.dart';
+import 'error_screen.dart';
 
 enum Decision { hit, stand, double, split, none }
 
@@ -24,6 +25,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Blackjack Trainer',
       home: MyHome(),
+      routes: <String, WidgetBuilder>{
+        '/error_screen': (BuildContext context) => ErrorScreen(),
+      },
     );
   }
 }
@@ -109,7 +113,7 @@ class _MyHomeState extends State<MyHome> {
                             style: TextStyle(fontSize: 10)),
                       ),
                       Container(
-                        decoration: BoxDecoration(border: Border.all()),
+                        // decoration: BoxDecoration(border: Border.all()),
                         padding: EdgeInsets.all(6.0),
                         width: 90,
                         height: 40,
@@ -122,6 +126,24 @@ class _MyHomeState extends State<MyHome> {
                               incorrect = 0;
                               percentCorrect = 100;
                             });
+                          },
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(6.0),
+                        width: 90,
+                        height: 40,
+                        child: RaisedButton(
+                          color: Colors.grey,
+                          child: Text('Errors', style: TextStyle(fontSize: 11)),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    ErrorScreen(),
+                              ),
+                            );
                           },
                         ),
                       ),
@@ -224,8 +246,8 @@ class _MyHomeState extends State<MyHome> {
     if (playerDecision != computerDecision) {
       incorrect++;
       percentCorrect = ((correct / (correct + incorrect)) * 100).round();
-      displayFlushbar(
-          context, computerDecision, playerCard1, playerCard2, dealerCard);
+      displayFlushbar(context, playerDecision, computerDecision, playerCard1,
+          playerCard2, dealerCard);
     } else
       correct++;
     percentCorrect = ((correct / (correct + incorrect)) * 100).round();
