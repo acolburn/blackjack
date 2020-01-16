@@ -125,6 +125,7 @@ class _MyHomeState extends State<MyHome> {
                               correct = 0;
                               incorrect = 0;
                               percentCorrect = 100;
+                              rowList = [];
                             });
                           },
                         ),
