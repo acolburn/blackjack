@@ -115,8 +115,8 @@ class _MyHomeState extends State<MyHome> {
                       Container(
                         // decoration: BoxDecoration(border: Border.all()),
                         padding: EdgeInsets.all(6.0),
-                        width: 90,
-                        height: 40,
+                        width: 95,
+                        height: 50,
                         child: RaisedButton(
                           color: Colors.grey,
                           child: Text('Reset', style: TextStyle(fontSize: 11)),
@@ -132,8 +132,8 @@ class _MyHomeState extends State<MyHome> {
                       ),
                       Container(
                         padding: EdgeInsets.all(6.0),
-                        width: 90,
-                        height: 40,
+                        width: 95,
+                        height: 50,
                         child: RaisedButton(
                           color: Colors.grey,
                           child: Text('Errors', style: TextStyle(fontSize: 11)),
