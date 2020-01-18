@@ -49,6 +49,7 @@ class _MyHomeState extends State<MyHome> {
   int correct = 0;
   int incorrect = 0;
   int percentCorrect = 0;
+  bool isVisible = false; //text message overlay's visibility
 
   void dealHand() {
     List<PlayingCard> deck = makeDeck();
@@ -66,6 +67,7 @@ class _MyHomeState extends State<MyHome> {
     makeComputerDecision();
 
     //Build UI
+
     return Scaffold(
       backgroundColor: Colors.green[500],
       body: GestureDetector(
@@ -170,11 +172,22 @@ class _MyHomeState extends State<MyHome> {
             ),
 
             //Player's cards
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Stack(
               children: <Widget>[
-                buildCard(playerCard1),
-                buildCard(playerCard2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    buildCard(playerCard1),
+                    buildCard(playerCard2),
+                  ],
+                ),
+                Visibility(
+                  child: Center(
+                    child: Text('Blackjack!',
+                        style: TextStyle(fontSize: 42, color: Colors.black)),
+                  ),
+                  visible: isVisible,
+                ),
               ],
             ),
             //Player's decision buttons
@@ -224,8 +237,18 @@ class _MyHomeState extends State<MyHome> {
 
   void makeComputerDecision() {
     handValue = computeHandValue(playerCard1, playerCard2);
+    //If there's a blackjack.
+    if (handValue == 21) {
+      isVisible = true;
+      Future.delayed(const Duration(seconds: 2), () {
+        setState(() {
+          isVisible = false;
+          dealHand();
+        });
+      });
+    }
     //If there's a pair.
-    if (playerCard1.value == playerCard2.value) {
+    else if (playerCard1.value == playerCard2.value) {
       computerDecision = processSplit(playerCard1, playerCard2, dealerCard);
     }
     //If there's an ace.
