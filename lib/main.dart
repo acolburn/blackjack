@@ -49,7 +49,8 @@ class _MyHomeState extends State<MyHome> {
   int correct = 0;
   int incorrect = 0;
   int percentCorrect = 0;
-  bool isVisible = false; //text message overlay's visibility
+  bool messageIsVisible = false; //text message overlay's visibility
+  String messageText = '';
 
   void dealHand() {
     List<PlayingCard> deck = makeDeck();
@@ -183,10 +184,10 @@ class _MyHomeState extends State<MyHome> {
                 ),
                 Visibility(
                   child: Center(
-                    child: Text('Blackjack!',
+                    child: Text(messageText,
                         style: TextStyle(fontSize: 42, color: Colors.black)),
                   ),
-                  visible: isVisible,
+                  visible: messageIsVisible,
                 ),
               ],
             ),
@@ -239,13 +240,7 @@ class _MyHomeState extends State<MyHome> {
     handValue = computeHandValue(playerCard1, playerCard2);
     //If there's a blackjack.
     if (handValue == 21) {
-      isVisible = true;
-      Future.delayed(const Duration(seconds: 2), () {
-        setState(() {
-          isVisible = false;
-          dealHand();
-        });
-      });
+      displayMessage('Blackjack!');
     }
     //If there's a pair.
     else if (playerCard1.value == playerCard2.value) {
@@ -266,6 +261,17 @@ class _MyHomeState extends State<MyHome> {
     }
   }
 
+  void displayMessage(String message) {
+    messageIsVisible = true;
+    messageText = message;
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        messageIsVisible = false;
+        dealHand();
+      });
+    });
+  }
+
   void processPlayerDecision(BuildContext context, Decision playerDecision) {
     if (playerDecision != computerDecision) {
       incorrect++;
@@ -276,7 +282,9 @@ class _MyHomeState extends State<MyHome> {
       correct++;
     percentCorrect = ((correct / (correct + incorrect)) * 100).round();
     setState(() {
-      dealHand();
+      correct == 100
+          ? displayMessage('100 correct decisions! Well done!')
+          : dealHand();
     });
   }
 }
