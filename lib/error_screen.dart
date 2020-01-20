@@ -31,28 +31,23 @@ class _ErrorScreenState extends State<ErrorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Expanded(
-              child: DataTable(
-                columns: [
-                  DataColumn(label: Text('Hand')),
-                  DataColumn(label: Text('Player')),
-                  DataColumn(label: Text('Recommended')),
-                ],
-                rows: rowList,
-              ),
-            ),
-            RaisedButton(
-              child: Text('Back'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
+      body: ListView(
+        children: <Widget>[
+          DataTable(
+            columns: [
+              DataColumn(label: Text('Hand')),
+              DataColumn(label: Text('Player')),
+              DataColumn(label: Text('Recommended')),
+            ],
+            rows: rowList,
+          ),
+          RaisedButton(
+            child: Text('Back'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
       ),
     );
   }
