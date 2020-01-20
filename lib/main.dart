@@ -15,7 +15,6 @@ enum Decision { hit, stand, double, split, none }
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     //Must use app in portrait mode
@@ -57,7 +56,7 @@ class _MyHomeState extends State<MyHome> {
 //    deck.forEach((element) => print('${element.type} of ${element.suit}'));
     playerCard1 = deck[random.nextInt(deck.length)];
     playerCard2 = deck[random.nextInt(deck.length)];
-//    playerCard2 = playerCard1; //(for pair testing)
+    playerCard2 = playerCard1; //(for pair testing)
 //    playerCard2 = deck[0]; //(for soft hand testing)
     dealerCard = deck[random.nextInt(deck.length)];
   }
@@ -81,6 +80,9 @@ class _MyHomeState extends State<MyHome> {
         },
         onHorizontalDragEnd: (e) {
           processPlayerDecision(context, Decision.stand);
+        },
+        onScaleEnd: (end) {
+          processPlayerDecision(context, Decision.split);
         },
 
         child: Column(
@@ -185,7 +187,7 @@ class _MyHomeState extends State<MyHome> {
                 Visibility(
                   child: Center(
                     child: Text(messageText,
-                        style: TextStyle(fontSize: 42, color: Colors.black)),
+                        style: TextStyle(fontSize: 32, color: Colors.black)),
                   ),
                   visible: messageIsVisible,
                 ),
@@ -282,8 +284,8 @@ class _MyHomeState extends State<MyHome> {
       correct++;
     percentCorrect = ((correct / (correct + incorrect)) * 100).round();
     setState(() {
-      correct == 100
-          ? displayMessage('100 correct decisions! Well done!')
+      (correct == 100 && incorrect == 0)
+          ? displayMessage('100/100! Well done!')
           : dealHand();
     });
   }
