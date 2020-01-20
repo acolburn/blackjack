@@ -100,32 +100,19 @@ class _MyHomeState extends State<MyHome> {
                       makeInfoCell('Correct: $correct'),
                       makeInfoCell('Incorrect: $incorrect'),
                       makeInfoCell('$percentCorrect% correct'),
-                      Container(
-                        // decoration: BoxDecoration(border: Border.all()),
-                        padding: EdgeInsets.all(6.0),
-                        width: 95,
-                        height: 50,
-                        child: RaisedButton(
-                          color: Colors.grey,
-                          child: Text('Reset', style: TextStyle(fontSize: 11)),
-                          onPressed: () {
+                      makeInfoCellButton(
+                          name: 'Reset',
+                          action: () {
                             setState(() {
                               correct = 0;
                               incorrect = 0;
                               percentCorrect = 100;
                               rowList = [];
                             });
-                          },
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(6.0),
-                        width: 95,
-                        height: 50,
-                        child: RaisedButton(
-                          color: Colors.grey,
-                          child: Text('Errors', style: TextStyle(fontSize: 11)),
-                          onPressed: () {
+                          }),
+                      makeInfoCellButton(
+                          name: 'Errors',
+                          action: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -133,9 +120,7 @@ class _MyHomeState extends State<MyHome> {
                                     ErrorScreen(),
                               ),
                             );
-                          },
-                        ),
-                      ),
+                          }),
                     ],
                   ),
                 ),
@@ -180,14 +165,14 @@ class _MyHomeState extends State<MyHome> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                MyButton(
+                PlayButton(
                   buttonText: 'Hit',
                   buttonColor: Colors.green[600],
                   onPress: () {
                     processPlayerDecision(context, Decision.hit);
                   },
                 ),
-                MyButton(
+                PlayButton(
                   buttonText: 'Stand',
                   buttonColor: Colors.red,
                   onPress: () {
@@ -199,14 +184,14 @@ class _MyHomeState extends State<MyHome> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                MyButton(
+                PlayButton(
                   buttonText: 'Double',
                   buttonColor: Colors.blue,
                   onPress: () {
                     processPlayerDecision(context, Decision.double);
                   },
                 ),
-                MyButton(
+                PlayButton(
                   buttonText: 'Split',
                   buttonColor: Colors.amber,
                   onPress: () {

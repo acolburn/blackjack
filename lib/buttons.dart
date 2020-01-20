@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MyButton extends MaterialButton {
-  MyButton(
+class PlayButton extends MaterialButton {
+  PlayButton(
       {@required this.buttonText,
       @required this.buttonColor,
       @required this.onPress});
