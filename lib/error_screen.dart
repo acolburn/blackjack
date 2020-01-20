@@ -35,13 +35,15 @@ class _ErrorScreenState extends State<ErrorScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            DataTable(
-              columns: [
-                DataColumn(label: Text('Hand')),
-                DataColumn(label: Text('Player')),
-                DataColumn(label: Text('Recommended')),
-              ],
-              rows: rowList,
+            Expanded(
+              child: DataTable(
+                columns: [
+                  DataColumn(label: Text('Hand')),
+                  DataColumn(label: Text('Player')),
+                  DataColumn(label: Text('Recommended')),
+                ],
+                rows: rowList,
+              ),
             ),
             RaisedButton(
               child: Text('Back'),
