@@ -9,6 +9,7 @@ import 'soft_hands.dart';
 import 'hard_hands.dart';
 import 'flushbar.dart';
 import 'error_screen.dart';
+import 'info_cell.dart';
 
 enum Decision { hit, stand, double, split, none }
 
@@ -56,7 +57,7 @@ class _MyHomeState extends State<MyHome> {
 //    deck.forEach((element) => print('${element.type} of ${element.suit}'));
     playerCard1 = deck[random.nextInt(deck.length)];
     playerCard2 = deck[random.nextInt(deck.length)];
-    playerCard2 = playerCard1; //(for pair testing)
+    // playerCard2 = playerCard1; //(for pair testing)
 //    playerCard2 = deck[0]; //(for soft hand testing)
     dealerCard = deck[random.nextInt(deck.length)];
   }
@@ -96,27 +97,9 @@ class _MyHomeState extends State<MyHome> {
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Column(
                     children: <Widget>[
-                      Container(
-                        decoration: BoxDecoration(border: Border.all()),
-                        padding: EdgeInsets.all(6.0),
-                        width: 90,
-                        child: Text('Correct: $correct',
-                            style: TextStyle(fontSize: 10)),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(border: Border.all()),
-                        padding: EdgeInsets.all(6.0),
-                        width: 90,
-                        child: Text('Incorrect: $incorrect',
-                            style: TextStyle(fontSize: 10)),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(border: Border.all()),
-                        padding: EdgeInsets.all(6.0),
-                        width: 90,
-                        child: Text('$percentCorrect% correct',
-                            style: TextStyle(fontSize: 10)),
-                      ),
+                      makeInfoCell('Correct: $correct'),
+                      makeInfoCell('Incorrect: $incorrect'),
+                      makeInfoCell('$percentCorrect% correct'),
                       Container(
                         // decoration: BoxDecoration(border: Border.all()),
                         padding: EdgeInsets.all(6.0),
