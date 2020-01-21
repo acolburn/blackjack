@@ -225,7 +225,7 @@ class _MyHomeState extends State<MyHome> {
     handValue = computeHandValue(playerCard1, playerCard2);
     //If there's a blackjack.
     if (handValue == 21) {
-      displayMessage('Blackjack!');
+      displayMessage('BLACKJACK!');
     }
     //If there's a pair.
     else if (playerCard1.value == playerCard2.value) {
@@ -268,7 +268,7 @@ class _MyHomeState extends State<MyHome> {
     percentCorrect = ((correct / (correct + incorrect)) * 100).round();
     setState(() {
       (correct == 100 && incorrect == 0)
-          ? displayMessage('100/100! Well done!')
+          ? displayMessage('100 IN A ROW! WELL DONE!')
           : dealHand();
     });
   }
