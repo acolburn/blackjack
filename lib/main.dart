@@ -71,79 +71,94 @@ class _MyHomeState extends State<MyHome> {
 
     return Scaffold(
       backgroundColor: Colors.green[500],
-      body: GestureDetector(
-        behavior: HitTestBehavior.translucent, //entire screen now recognized
-        onTap: () {
-          processPlayerDecision(context, Decision.hit);
-        },
-        onDoubleTap: () {
-          processPlayerDecision(context, Decision.double);
-        },
-        onHorizontalDragEnd: (e) {
-          processPlayerDecision(context, Decision.stand);
-        },
-        onScaleEnd: (end) {
-          processPlayerDecision(context, Decision.split);
-        },
+      // body: GestureDetector(
+      //   behavior: HitTestBehavior.translucent, //entire screen now recognized
+      //   onTap: () {
+      //     processPlayerDecision(context, Decision.hit);
+      //   },
+      //   onDoubleTap: () {
+      //     processPlayerDecision(context, Decision.double);
+      //   },
+      //   onHorizontalDragEnd: (e) {
+      //     processPlayerDecision(context, Decision.stand);
+      //   },
+      //   onScaleEnd: (end) {
+      //     processPlayerDecision(context, Decision.split);
+      //   },
 
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                //Display #correct and #incorrect
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Column(
-                    children: <Widget>[
-                      makeInfoCell('Correct: $correct'),
-                      makeInfoCell('Incorrect: $incorrect'),
-                      makeInfoCell('$percentCorrect% correct'),
-                      makeInfoCellButton(
-                          name: 'Reset',
-                          action: () {
-                            setState(() {
-                              correct = 0;
-                              incorrect = 0;
-                              percentCorrect = 100;
-                              rowList = [];
-                            });
-                          }),
-                      makeInfoCellButton(
-                          name: 'Errors',
-                          action: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    ErrorScreen(),
-                              ),
-                            );
-                          }),
-                    ],
-                  ),
+      // child: Column(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              //Display #correct and #incorrect
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Column(
+                  children: <Widget>[
+                    makeInfoCell('Correct: $correct'),
+                    makeInfoCell('Incorrect: $incorrect'),
+                    makeInfoCell('$percentCorrect% correct'),
+                    makeInfoCellButton(
+                        name: 'Reset',
+                        action: () {
+                          setState(() {
+                            correct = 0;
+                            incorrect = 0;
+                            percentCorrect = 100;
+                            rowList = [];
+                          });
+                        }),
+                    makeInfoCellButton(
+                        name: 'Errors',
+                        action: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => ErrorScreen(),
+                            ),
+                          );
+                        }),
+                  ],
                 ),
-                Expanded(flex: 1, child: Container()),
-                //Dealer's cards
-                Expanded(
-                  flex: 4,
-                  child: Stack(
-                    overflow: Overflow.visible,
-                    children: <Widget>[
-                      buildFaceDownCard(),
-                      Positioned(
-                        left: 30.0,
-                        child: buildCard(dealerCard),
-                      ),
-                    ],
-                  ),
+              ),
+              Expanded(flex: 1, child: Container()),
+              //Dealer's cards
+              Expanded(
+                flex: 4,
+                child: Stack(
+                  overflow: Overflow.visible,
+                  children: <Widget>[
+                    buildFaceDownCard(),
+                    Positioned(
+                      left: 30.0,
+                      child: buildCard(dealerCard),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
 
-            //Player's cards
-            Stack(
+          //Player's cards
+          GestureDetector(
+            behavior:
+                HitTestBehavior.translucent, //entire screen now recognized
+            onTap: () {
+              processPlayerDecision(context, Decision.hit);
+            },
+            onDoubleTap: () {
+              processPlayerDecision(context, Decision.double);
+            },
+            onHorizontalDragEnd: (e) {
+              processPlayerDecision(context, Decision.stand);
+            },
+            onScaleEnd: (end) {
+              processPlayerDecision(context, Decision.split);
+            },
+            child: Stack(
               children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -161,47 +176,47 @@ class _MyHomeState extends State<MyHome> {
                 ),
               ],
             ),
-            //Player's decision buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                PlayButton(
-                  buttonText: 'Hit',
-                  buttonColor: Colors.green[600],
-                  onPress: () {
-                    processPlayerDecision(context, Decision.hit);
-                  },
-                ),
-                PlayButton(
-                  buttonText: 'Stand',
-                  buttonColor: Colors.red,
-                  onPress: () {
-                    processPlayerDecision(context, Decision.stand);
-                  },
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                PlayButton(
-                  buttonText: 'Double',
-                  buttonColor: Colors.blue,
-                  onPress: () {
-                    processPlayerDecision(context, Decision.double);
-                  },
-                ),
-                PlayButton(
-                  buttonText: 'Split',
-                  buttonColor: Colors.amber,
-                  onPress: () {
-                    processPlayerDecision(context, Decision.split);
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
+          //Player's decision buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              PlayButton(
+                buttonText: 'Hit',
+                buttonColor: Colors.green[600],
+                onPress: () {
+                  processPlayerDecision(context, Decision.hit);
+                },
+              ),
+              PlayButton(
+                buttonText: 'Stand',
+                buttonColor: Colors.red,
+                onPress: () {
+                  processPlayerDecision(context, Decision.stand);
+                },
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              PlayButton(
+                buttonText: 'Double',
+                buttonColor: Colors.blue,
+                onPress: () {
+                  processPlayerDecision(context, Decision.double);
+                },
+              ),
+              PlayButton(
+                buttonText: 'Split',
+                buttonColor: Colors.amber,
+                onPress: () {
+                  processPlayerDecision(context, Decision.split);
+                },
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
