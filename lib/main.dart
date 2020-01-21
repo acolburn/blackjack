@@ -232,11 +232,11 @@ class _MyHomeState extends State<MyHome> {
   }
 
   void displayMessage(String message) {
-    messageIsVisible = true;
+    messageIsVisible = true; //display the message
     messageText = message;
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
-        messageIsVisible = false;
+        messageIsVisible = false; //2 seconds later, stop displaying the message
         dealHand();
       });
     });
@@ -247,7 +247,7 @@ class _MyHomeState extends State<MyHome> {
       incorrect++;
       percentCorrect = ((correct / (correct + incorrect)) * 100).round();
       displayFlushbar(context, playerDecision, computerDecision, playerCard1,
-          playerCard2, dealerCard);
+          playerCard2, dealerCard); //this method also adds error to error_chart
     } else
       correct++;
     percentCorrect = ((correct / (correct + incorrect)) * 100).round();
