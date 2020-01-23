@@ -12,6 +12,7 @@ import 'error_screen.dart';
 import 'info_cell.dart';
 
 enum Decision { hit, stand, double, split, none }
+enum HandType { pairs, softHands, allHands }
 
 void main() => runApp(MyApp());
 
@@ -24,15 +25,75 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Blackjack Trainer',
-      home: MyHome(),
+      home: StartPage(),
       routes: <String, WidgetBuilder>{
+        // '/home_screen': (BuildContext context) => MyHome(),
         '/error_screen': (BuildContext context) => ErrorScreen(),
       },
     );
   }
 }
 
+class StartPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    HandType hand;
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          FlatButton(
+            color: Colors.white,
+            child: Text('Soft Hands'),
+            onPressed: () {
+              hand = HandType.softHands;
+              // Navigator.of(context).pushNamed('/home_screen');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => MyHome(hand),
+                ),
+              );
+            },
+          ),
+          FlatButton(
+            color: Colors.white,
+            child: Text('Pairs'),
+            onPressed: () {
+              hand = HandType.pairs;
+              // Navigator.of(context).pushNamed('/home_screen');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => MyHome(hand),
+                ),
+              );
+            },
+          ),
+          FlatButton(
+            color: Colors.white,
+            child: Text('All Hands'),
+            onPressed: () {
+              hand = HandType.allHands;
+              // Navigator.of(context).pushNamed('/home_screen');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => MyHome(hand),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class MyHome extends StatefulWidget {
+  final HandType handType;
+  MyHome(this.handType);
+
   @override
   _MyHomeState createState() => _MyHomeState();
 }
@@ -57,8 +118,12 @@ class _MyHomeState extends State<MyHome> {
 //    deck.forEach((element) => print('${element.type} of ${element.suit}'));
     playerCard1 = deck[random.nextInt(deck.length)];
     playerCard2 = deck[random.nextInt(deck.length)];
-    // playerCard2 = playerCard1; //(for pair testing)
-//    playerCard2 = deck[0]; //(for soft hand testing)
+    if (widget.handType == HandType.pairs) {
+      playerCard2 = playerCard1;
+    } //(for pair testing)
+    if (widget.handType == HandType.softHands) {
+      playerCard2 = deck[0];
+    } //(for soft hand testing)
     dealerCard = deck[random.nextInt(deck.length)];
   }
 
