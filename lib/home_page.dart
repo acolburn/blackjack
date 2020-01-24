@@ -123,6 +123,8 @@ class _MyHomeState extends State<MyHome> {
                       Row(
                         children: <Widget>[
                           Checkbox(
+                            activeColor: Colors.white,
+                            checkColor: Colors.green,
                             value: inclBlackjacks ?? true,
                             onChanged: (bool newValue) {
                               setState(() {
@@ -131,8 +133,10 @@ class _MyHomeState extends State<MyHome> {
                             },
                           ),
                           Text('Include blackjacks?',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.white)),
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'Verdana',
+                                  color: Colors.white)),
                         ],
                       ),
                     ],

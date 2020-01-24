@@ -24,7 +24,7 @@ class PlayButton extends MaterialButton {
       minWidth: 100,
       child: Text(
         buttonText,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.white, fontFamily: 'Verdana'),
       ),
     );
   }

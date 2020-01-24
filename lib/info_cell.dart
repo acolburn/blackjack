@@ -7,7 +7,9 @@ Container makeInfoCell(String name) {
     ),
     padding: EdgeInsets.all(6.0),
     width: 90,
-    child: Text(name, style: TextStyle(fontSize: 10, color: Colors.white)),
+    child: Text(name,
+        style: TextStyle(
+            fontSize: 10, fontFamily: 'Verdana', color: Colors.white)),
   );
 }
 
@@ -20,7 +22,7 @@ Container makeInfoCellButton(
     height: 50,
     child: RaisedButton(
       color: Colors.white70,
-      child: Text(name, style: TextStyle(fontSize: 11)),
+      child: Text(name, style: TextStyle(fontSize: 11, fontFamily: 'Verdana')),
       onPressed: action,
     ),
   );
