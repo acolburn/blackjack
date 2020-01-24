@@ -34,6 +34,7 @@ class _MyHomeState extends State<MyHome> {
   bool messageIsVisible =
       false; //whether or not you can see the message saying "Blackjack!", etc.
   String messageText = '';
+  bool inclBlackjacks;
 
   void dealHand() {
     List<PlayingCard> deck = makeDeck();
@@ -55,6 +56,12 @@ class _MyHomeState extends State<MyHome> {
       //Getting a lot of blackjacks; this decreases how often they appear
       if (cardValueToNumber(playerCard1) > 9) {
         playerCard1 = deck[random.nextInt(deck.length)];
+      }
+      //Include blackjacks?
+      if ((inclBlackjacks == false) &&
+          (cardValueToNumber(playerCard1) + cardValueToNumber(playerCard2) ==
+              21)) {
+        dealHand();
       }
     }
     //Randomly pick dealer up card:
@@ -87,6 +94,7 @@ class _MyHomeState extends State<MyHome> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       makeInfoCell('Correct: $correct'),
                       makeInfoCell('Incorrect: $incorrect'),
@@ -112,6 +120,21 @@ class _MyHomeState extends State<MyHome> {
                               ),
                             );
                           }),
+                      Row(
+                        children: <Widget>[
+                          Checkbox(
+                            value: inclBlackjacks ?? true,
+                            onChanged: (bool newValue) {
+                              setState(() {
+                                inclBlackjacks = newValue;
+                              });
+                            },
+                          ),
+                          Text('Include blackjacks?',
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.white)),
+                        ],
+                      ),
                     ],
                   ),
                 ),
