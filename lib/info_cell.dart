@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 Container makeInfoCell(String name) {
   return Container(
-    decoration: BoxDecoration(border: Border.all()),
+    decoration: BoxDecoration(
+      border: Border.all(color: Colors.white),
+    ),
     padding: EdgeInsets.all(6.0),
     width: 90,
-    child: Text(name, style: TextStyle(fontSize: 10)),
+    child: Text(name, style: TextStyle(fontSize: 10, color: Colors.white)),
   );
 }
 
@@ -17,7 +19,7 @@ Container makeInfoCellButton(
     width: 95,
     height: 50,
     child: RaisedButton(
-      color: Colors.grey,
+      color: Colors.white70,
       child: Text(name, style: TextStyle(fontSize: 11)),
       onPressed: action,
     ),

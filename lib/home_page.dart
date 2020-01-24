@@ -43,11 +43,19 @@ class _MyHomeState extends State<MyHome> {
     playerCard2 = deck[random.nextInt(deck.length)];
     //If you're limiting player hands to pairs only:
     if (widget.handType == HandType.pairs) {
+      //Decrease how often a pair of tens or face cards come up
+      if (cardValueToNumber(playerCard1) > 9) {
+        playerCard1 = deck[random.nextInt(deck.length)];
+      }
       playerCard2 = playerCard1;
     }
     //If you're limiting player hands to soft hands only:
     if (widget.handType == HandType.softHands) {
       playerCard2 = deck[0]; //deck[0] is an ace
+      //Getting a lot of blackjacks; this decreases how often they appear
+      if (cardValueToNumber(playerCard1) > 9) {
+        playerCard1 = deck[random.nextInt(deck.length)];
+      }
     }
     //Randomly pick dealer up card:
     dealerCard = deck[random.nextInt(deck.length)];
@@ -62,136 +70,145 @@ class _MyHomeState extends State<MyHome> {
     return Scaffold(
       backgroundColor: Colors.green[500],
       // child: Column(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              //Display #correct and #incorrect
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Column(
-                  children: <Widget>[
-                    makeInfoCell('Correct: $correct'),
-                    makeInfoCell('Incorrect: $incorrect'),
-                    makeInfoCell('$percentCorrect% correct'),
-                    makeInfoCellButton(
-                        name: 'Reset',
-                        action: () {
-                          setState(() {
-                            correct = 0;
-                            incorrect = 0;
-                            percentCorrect = 100;
-                            rowList = [];
-                          });
-                        }),
-                    makeInfoCellButton(
-                        name: 'Errors',
-                        action: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => ErrorScreen(),
-                            ),
-                          );
-                        }),
-                  ],
-                ),
-              ),
-              Expanded(flex: 1, child: Container()),
-              //Dealer's cards
-              Expanded(
-                flex: 4,
-                child: Stack(
-                  overflow: Overflow.visible,
-                  children: <Widget>[
-                    buildFaceDownCard(),
-                    Positioned(
-                      left: 30.0,
-                      child: buildCard(dealerCard),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/blackjack_table.jpg'),
+            fit: BoxFit.cover,
           ),
-
-          //Player's cards
-          GestureDetector(
-            behavior: HitTestBehavior
-                .translucent, //entire screen [row areas] now recognized
-            onTap: () {
-              processPlayerDecision(context, Decision.hit);
-            },
-            onDoubleTap: () {
-              processPlayerDecision(context, Decision.double);
-            },
-            onHorizontalDragEnd: (e) {
-              processPlayerDecision(context, Decision.stand);
-            },
-            onScaleEnd: (end) {
-              processPlayerDecision(context, Decision.split);
-            },
-            child: Stack(
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    buildCard(playerCard1),
-                    buildCard(playerCard2),
-                  ],
-                ),
-                Visibility(
-                  child: Center(
-                    child: Text(messageText,
-                        style: TextStyle(fontSize: 32, color: Colors.black)),
+                //Display #correct and #incorrect
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Column(
+                    children: <Widget>[
+                      makeInfoCell('Correct: $correct'),
+                      makeInfoCell('Incorrect: $incorrect'),
+                      makeInfoCell('$percentCorrect% correct'),
+                      makeInfoCellButton(
+                          name: 'Reset',
+                          action: () {
+                            setState(() {
+                              correct = 0;
+                              incorrect = 0;
+                              percentCorrect = 100;
+                              rowList = [];
+                            });
+                          }),
+                      makeInfoCellButton(
+                          name: 'Errors',
+                          action: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    ErrorScreen(),
+                              ),
+                            );
+                          }),
+                    ],
                   ),
-                  visible: messageIsVisible,
+                ),
+                Expanded(flex: 1, child: Container()),
+                //Dealer's cards
+                Expanded(
+                  flex: 4,
+                  child: Stack(
+                    overflow: Overflow.visible,
+                    children: <Widget>[
+                      buildFaceDownCard(),
+                      Positioned(
+                        left: 30.0,
+                        child: buildCard(dealerCard),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-          //Player's decision buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              PlayButton(
-                buttonText: 'Hit',
-                buttonColor: Colors.green[600],
-                onPress: () {
-                  processPlayerDecision(context, Decision.hit);
-                },
+
+            //Player's cards
+            GestureDetector(
+              behavior: HitTestBehavior
+                  .translucent, //entire screen [row areas] now recognized
+              onTap: () {
+                processPlayerDecision(context, Decision.hit);
+              },
+              onDoubleTap: () {
+                processPlayerDecision(context, Decision.double);
+              },
+              onHorizontalDragEnd: (e) {
+                processPlayerDecision(context, Decision.stand);
+              },
+              onScaleEnd: (end) {
+                processPlayerDecision(context, Decision.split);
+              },
+              child: Stack(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      buildCard(playerCard1),
+                      buildCard(playerCard2),
+                    ],
+                  ),
+                  Visibility(
+                    child: Center(
+                      child: Text(messageText,
+                          style: TextStyle(fontSize: 32, color: Colors.black)),
+                    ),
+                    visible: messageIsVisible,
+                  ),
+                ],
               ),
-              PlayButton(
-                buttonText: 'Stand',
-                buttonColor: Colors.red,
-                onPress: () {
-                  processPlayerDecision(context, Decision.stand);
-                },
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              PlayButton(
-                buttonText: 'Double',
-                buttonColor: Colors.blue,
-                onPress: () {
-                  processPlayerDecision(context, Decision.double);
-                },
-              ),
-              PlayButton(
-                buttonText: 'Split',
-                buttonColor: Colors.amber,
-                onPress: () {
-                  processPlayerDecision(context, Decision.split);
-                },
-              ),
-            ],
-          ),
-        ],
+            ),
+            //Player's decision buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                PlayButton(
+                  buttonText: 'Hit',
+                  buttonColor: Colors.green[600],
+                  onPress: () {
+                    processPlayerDecision(context, Decision.hit);
+                  },
+                ),
+                PlayButton(
+                  buttonText: 'Stand',
+                  buttonColor: Colors.red,
+                  onPress: () {
+                    processPlayerDecision(context, Decision.stand);
+                  },
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                PlayButton(
+                  buttonText: 'Double',
+                  buttonColor: Colors.blue,
+                  onPress: () {
+                    processPlayerDecision(context, Decision.double);
+                  },
+                ),
+                PlayButton(
+                  buttonText: 'Split',
+                  buttonColor: Colors.amber,
+                  onPress: () {
+                    processPlayerDecision(context, Decision.split);
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
