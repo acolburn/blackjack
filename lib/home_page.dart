@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audio_cache.dart';
 import 'main.dart';
 import 'dart:math';
 import 'playing_card.dart';
@@ -28,7 +29,7 @@ class _MyHomeState extends State<MyHome> {
   int handValue;
   Decision playerDecision = Decision.none;
   Decision computerDecision = Decision.none;
-  int correct = 0;
+  int correct = 98;
   int incorrect = 0;
   int percentCorrect = 0;
   bool messageIsVisible =
@@ -286,9 +287,13 @@ class _MyHomeState extends State<MyHome> {
       correct++;
     percentCorrect = ((correct / (correct + incorrect)) * 100).round();
     setState(() {
-      (correct == 100 && incorrect == 0)
-          ? displayMessage('100 IN A ROW! WELL DONE!')
-          : dealHand();
+      if (correct == 100 && incorrect == 0) {
+        final player = AudioCache();
+        player.play('tada.mp3');
+        displayMessage('100 IN A ROW! WELL DONE!');
+      } else {
+        dealHand();
+      }
     });
   }
 }
