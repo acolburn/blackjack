@@ -29,7 +29,7 @@ class _MyHomeState extends State<MyHome> {
   int handValue;
   Decision playerDecision = Decision.none;
   Decision computerDecision = Decision.none;
-  int correct = 98;
+  int correct = 0;
   int incorrect = 0;
   int percentCorrect = 0;
   bool messageIsVisible =
@@ -58,16 +58,18 @@ class _MyHomeState extends State<MyHome> {
       if (cardValueToNumber(playerCard1) > 9) {
         playerCard1 = deck[random.nextInt(deck.length)];
       }
+}
       //Include blackjacks?
       if ((inclBlackjacks == false) &&
           (cardValueToNumber(playerCard1) + cardValueToNumber(playerCard2) ==
               21)) {
         dealHand();
       }
-    }
+     else {
     //Randomly pick dealer up card:
     dealerCard = deck[random.nextInt(deck.length)];
   }
+}
 
   @override
   Widget build(BuildContext context) {
