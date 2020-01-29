@@ -58,18 +58,17 @@ class _MyHomeState extends State<MyHome> {
       if (cardValueToNumber(playerCard1) > 9) {
         playerCard1 = deck[random.nextInt(deck.length)];
       }
-}
-      //Include blackjacks?
-      if ((inclBlackjacks == false) &&
-          (cardValueToNumber(playerCard1) + cardValueToNumber(playerCard2) ==
-              21)) {
-        dealHand();
-      }
-     else {
-    //Randomly pick dealer up card:
-    dealerCard = deck[random.nextInt(deck.length)];
+    }
+    //Include blackjacks?
+    if ((inclBlackjacks == false) &&
+        (cardValueToNumber(playerCard1) + cardValueToNumber(playerCard2) ==
+            21)) {
+      dealHand();
+    } else {
+      //Randomly pick dealer up card:
+      dealerCard = deck[random.nextInt(deck.length)];
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
