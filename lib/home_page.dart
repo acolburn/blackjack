@@ -29,7 +29,7 @@ class _MyHomeState extends State<MyHome> {
   int handValue;
   Decision playerDecision = Decision.none;
   Decision computerDecision = Decision.none;
-  int correct = 98;
+  int correct = 0;
   int incorrect = 0;
   int percentCorrect = 0;
   bool messageIsVisible =
