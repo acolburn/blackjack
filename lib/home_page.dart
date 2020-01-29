@@ -29,7 +29,7 @@ class _MyHomeState extends State<MyHome> {
   int handValue;
   Decision playerDecision = Decision.none;
   Decision computerDecision = Decision.none;
-  int correct = 0;
+  int correct = 98;
   int incorrect = 0;
   int percentCorrect = 0;
   bool messageIsVisible =
@@ -43,6 +43,7 @@ class _MyHomeState extends State<MyHome> {
     //Randomly pick two cards from deck
     playerCard1 = deck[random.nextInt(deck.length)];
     playerCard2 = deck[random.nextInt(deck.length)];
+
     //If you're limiting player hands to pairs only:
     if (widget.handType == HandType.pairs) {
       //Decrease how often a pair of tens or face cards come up
@@ -51,6 +52,7 @@ class _MyHomeState extends State<MyHome> {
       }
       playerCard2 = playerCard1;
     }
+
     //If you're limiting player hands to soft hands only:
     if (widget.handType == HandType.softHands) {
       playerCard2 = deck[0]; //deck[0] is an ace
@@ -59,15 +61,16 @@ class _MyHomeState extends State<MyHome> {
         playerCard1 = deck[random.nextInt(deck.length)];
       }
     }
+
     //Include blackjacks?
     if ((inclBlackjacks == false) &&
         (cardValueToNumber(playerCard1) + cardValueToNumber(playerCard2) ==
             21)) {
       dealHand();
-    } else {
-      //Randomly pick dealer up card:
-      dealerCard = deck[random.nextInt(deck.length)];
     }
+
+    //Randomly pick dealer up card:
+    dealerCard = deck[random.nextInt(deck.length)];
   }
 
   @override
