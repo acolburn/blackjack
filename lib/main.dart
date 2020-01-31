@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'home_page.dart';
+import 'count_deck.dart';
 
 enum Decision { hit, stand, double, split, none }
 enum HandType { pairs, softHands, allHands }
@@ -107,6 +108,22 @@ class StartPage extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (BuildContext context) => MyHome(hand),
+                      ),
+                    );
+                  },
+                ),
+                FlatButton(
+                  color: Colors.white,
+                  child: Text(
+                    'Countdown a Deck',
+                    style: TextStyle(fontSize: 14, fontFamily: 'Verdana'),
+                  ),
+                  onPressed: () {
+                    hand = HandType.allHands;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => CountDeck(),
                       ),
                     );
                   },
