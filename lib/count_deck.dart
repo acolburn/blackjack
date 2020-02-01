@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'playing_card.dart';
 import 'info_cell.dart';
 
@@ -48,7 +49,24 @@ class _CountDeckState extends State<CountDeck> {
                           isVisible = !isVisible;
                         });
                       }),
-                  makeInfoCellButton(name: 'Autocountdown', action: () {})
+                  makeInfoCellButton(
+                      name: 'Auto',
+                      action: () {
+                        resetDeck();
+                        Timer.periodic(Duration(seconds: 1), (timer) {
+                          print('$i');
+                          if (i < 51) {
+                            i++;
+                            if (cardValueToNumber(deck[i]) >= 10) {
+                              count--;
+                            } else if (cardValueToNumber(deck[i]) <= 7) {
+                              count++;
+                            }
+                            setState(() {});
+                          } else
+                            timer.cancel();
+                        });
+                      })
                 ],
               ),
             ),
