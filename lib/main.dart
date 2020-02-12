@@ -112,14 +112,6 @@ class StartPage extends StatelessWidget {
                     );
                   },
                 ),
-                Text(
-                  'Learning to count?',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Verdana',
-                      color: Colors.black),
-                ),
                 FlatButton(
                   color: Colors.white,
                   child: Text(

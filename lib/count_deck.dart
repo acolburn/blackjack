@@ -12,7 +12,6 @@ class _CountDeckState extends State<CountDeck> {
   int i = 0;
   int count = 0;
   bool isVisible = true;
-  bool isMultiCard = true;
   List<PlayingCard> deck = makeDeck();
 
   @override
@@ -36,7 +35,7 @@ class _CountDeckState extends State<CountDeck> {
 //          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top: 10.0),
+              padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: <Widget>[
                   makeInfoCellButton(
@@ -51,28 +50,23 @@ class _CountDeckState extends State<CountDeck> {
                         });
                       }),
                   makeInfoCellButton(
-                    name: 'Auto',
-                    action: autoCountdown,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Checkbox(
-                        activeColor: Colors.white,
-                        checkColor: Colors.green,
-                        value: isMultiCard ?? true,
-                        onChanged: (bool newValue) {
-                          setState(() {
-                            isMultiCard = newValue;
-                          });
-                        },
-                      ),
-                      Text('Show 2+ cards?',
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: 'Verdana',
-                              color: Colors.white)),
-                    ],
-                  ),
+                      name: 'Auto',
+                      action: () {
+                        resetDeck();
+                        Timer.periodic(Duration(seconds: 1), (timer) {
+                          print('$i');
+                          if (i < 51) {
+                            i++;
+                            if (cardValueToNumber(deck[i]) >= 10) {
+                              count--;
+                            } else if (cardValueToNumber(deck[i]) <= 7) {
+                              count++;
+                            }
+                            setState(() {});
+                          } else
+                            timer.cancel();
+                        });
+                      })
                 ],
               ),
             ),
@@ -81,27 +75,25 @@ class _CountDeckState extends State<CountDeck> {
             Expanded(flex: 1, child: Container()),
             GestureDetector(
               onTap: () {
-                if (i < 51 && isMultiCard == false) {
-                  dealCards(1);
-                } else if (i < 49 && isMultiCard == true) {
-                  dealCards(3);
-                } else if (i < 51 && isMultiCard == true) {
-                  dealCards(1);
-                } else {
-                  dealCards(0);
+                if (i < 51) {
+                  setState(() {
+                    i++;
+                    if (cardValueToNumber(deck[i]) >= 10) {
+                      count--;
+                    } else if (cardValueToNumber(deck[i]) <= 7) {
+                      count++;
+                    }
+                  });
                 }
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Row(
-                    children: displayMultipleCards(),
-                  ),
+                  buildCard(deck[i]),
                   Visibility(
-                    visible: isVisible,
-                    child: Text('$count',
-                        style: TextStyle(fontSize: 42, color: Colors.black)),
-                  ),
+                      visible: isVisible,
+                      child: Text('$count',
+                          style: TextStyle(fontSize: 42, color: Colors.black)))
                 ],
               ),
             ),
@@ -115,78 +107,16 @@ class _CountDeckState extends State<CountDeck> {
     );
   }
 
-  void dealCards(int n) {
-    setState(() {
-      i = i + n;
-      if (n == 1) {
-        adjustCount(deck[i]);
-      } else if (n == 2) {
-        adjustCount(deck[i]);
-        adjustCount(deck[i + 1]);
-      } else if (n == 3) {
-        adjustCount(deck[i]);
-        adjustCount(deck[i + 1]);
-        adjustCount(deck[i + 2]);
-      } else {
-        return;
-      }
-    });
-  }
-
-  void adjustCount(PlayingCard aCard) {
-    if (cardValueToNumber(aCard) >= 10) {
-      count--;
-    } else if (cardValueToNumber(aCard) <= 7) {
-      count++;
-    }
-  }
-
   void resetDeck() {
     deck.shuffle();
-    if (isMultiCard == false) {
-      setState(() {
-        i = 0;
-        count = 0;
-        adjustCount(deck[0]);
-      });
-    } else if (isMultiCard == true) {
-      setState(() {
-        count = 0;
-        i = 0;
-        adjustCount(deck[0]);
-        adjustCount(deck[1]);
-        adjustCount(deck[2]);
-      });
-    }
-  }
-
-  void autoCountdown() {
-    resetDeck();
-    Timer.periodic(Duration(seconds: 1), (timer) {
-      if (i < 51) {
-        i++;
-        adjustCount(deck[i]);
-        setState(() {});
+    setState(() {
+      i = 0;
+      if (cardValueToNumber(deck[0]) >= 10) {
+        count = -1;
+      } else if (cardValueToNumber(deck[0]) <= 7) {
+        count = 1;
       } else
-        timer.cancel();
+        count = 0;
     });
-  }
-
-  List<Widget> displayMultipleCards() {
-    if (isMultiCard == false) {
-      return <Widget>[
-        buildCard(deck[i]),
-      ];
-    } else if (i < 49 && isMultiCard == true) {
-      return <Widget>[
-        buildCard(deck[i]),
-        buildCard(deck[i + 1]),
-        buildCard(deck[i + 2]),
-      ];
-    } else {
-      return <Widget>[
-        buildCard(deck[i]),
-      ];
-    }
   }
 }
