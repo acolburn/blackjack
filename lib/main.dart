@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'home_page.dart';
 import 'count_deck.dart';
-import 'package:provider/provider.dart';
 
 enum Decision { hit, stand, double, split, none }
 enum HandType { pairs, softHands, allHands }
@@ -15,17 +14,14 @@ class MyApp extends StatelessWidget {
     //Must use app in portrait mode
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    return ChangeNotifierProvider<Data>(
-      create: (context) => Data(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Blackjack Trainer',
-        home: StartPage(),
-        routes: <String, WidgetBuilder>{
-          // '/home_screen': (BuildContext context) => MyHome(),
-          // '/error_screen': (BuildContext context) => ErrorScreen(),
-        },
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Blackjack Trainer',
+      home: StartPage(),
+      routes: <String, WidgetBuilder>{
+        // '/home_screen': (BuildContext context) => MyHome(),
+        // '/error_screen': (BuildContext context) => ErrorScreen(),
+      },
     );
   }
 }
