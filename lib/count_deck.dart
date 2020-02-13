@@ -12,6 +12,7 @@ class _CountDeckState extends State<CountDeck> {
   int i = 0;
   int count = 0;
   bool isVisible = true;
+  bool isMultiCard = false;
   List<PlayingCard> deck = makeDeck();
 
   @override
@@ -66,7 +67,26 @@ class _CountDeckState extends State<CountDeck> {
                           } else
                             timer.cancel();
                         });
-                      })
+                      }),
+                  Row(
+                    children: <Widget>[
+                      Checkbox(
+                        activeColor: Colors.white,
+                        checkColor: Colors.green,
+                        value: isMultiCard ?? true,
+                        onChanged: (bool newValue) {
+                          setState(() {
+                            isMultiCard = newValue;
+                          });
+                        },
+                      ),
+                      Text('Show 2+ cards?',
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Verdana',
+                              color: Colors.white)),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -78,11 +98,7 @@ class _CountDeckState extends State<CountDeck> {
                 if (i < 51) {
                   setState(() {
                     i++;
-                    if (cardValueToNumber(deck[i]) >= 10) {
-                      count--;
-                    } else if (cardValueToNumber(deck[i]) <= 7) {
-                      count++;
-                    }
+                    adjustCount(deck[i]);
                   });
                 }
               },
@@ -118,5 +134,13 @@ class _CountDeckState extends State<CountDeck> {
       } else
         count = 0;
     });
+  }
+
+  void adjustCount(PlayingCard aCard) {
+    if (cardValueToNumber(aCard) >= 10) {
+      count--;
+    } else if (cardValueToNumber(aCard) <= 7) {
+      count++;
+    }
   }
 }
