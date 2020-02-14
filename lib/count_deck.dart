@@ -11,7 +11,7 @@ class CountDeck extends StatefulWidget {
 class _CountDeckState extends State<CountDeck> {
   int i = 0;
   int count = 0;
-  bool isVisible = true;
+  bool isCountVisible = true;
   bool isMultiCard = false;
   List<PlayingCard> deck = makeDeck();
 
@@ -47,7 +47,7 @@ class _CountDeckState extends State<CountDeck> {
                       name: 'Display Count',
                       action: () {
                         setState(() {
-                          isVisible = !isVisible;
+                          isCountVisible = !isCountVisible;
                         });
                       }),
                   makeInfoCellButton(
@@ -58,12 +58,10 @@ class _CountDeckState extends State<CountDeck> {
                           print('$i');
                           if (i < 51) {
                             i++;
-                            if (cardValueToNumber(deck[i]) >= 10) {
-                              count--;
-                            } else if (cardValueToNumber(deck[i]) <= 7) {
-                              count++;
-                            }
-                            setState(() {});
+
+                            setState(() {
+                              countCard(deck[i]);
+                            });
                           } else
                             timer.cancel();
                         });
@@ -98,16 +96,24 @@ class _CountDeckState extends State<CountDeck> {
                 if (i < 51) {
                   setState(() {
                     i++;
-                    adjustCount(deck[i]);
+                    countCard(deck[i]);
                   });
                 }
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  buildCard(deck[i]),
+                  Row(
+                    children: <Widget>[
+                      buildCard(deck[i]),
+                      Visibility(
+                        visible: isMultiCard,
+                        child: buildCard(deck[i]),
+                      ),
+                    ],
+                  ),
                   Visibility(
-                      visible: isVisible,
+                      visible: isCountVisible,
                       child: Text('$count',
                           style: TextStyle(fontSize: 42, color: Colors.black)))
                 ],
@@ -127,16 +133,12 @@ class _CountDeckState extends State<CountDeck> {
     deck.shuffle();
     setState(() {
       i = 0;
-      if (cardValueToNumber(deck[0]) >= 10) {
-        count = -1;
-      } else if (cardValueToNumber(deck[0]) <= 7) {
-        count = 1;
-      } else
-        count = 0;
+      count = 0;
+      countCard(deck[0]);
     });
   }
 
-  void adjustCount(PlayingCard aCard) {
+  void countCard(PlayingCard aCard) {
     if (cardValueToNumber(aCard) >= 10) {
       count--;
     } else if (cardValueToNumber(aCard) <= 7) {
