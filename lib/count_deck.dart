@@ -93,22 +93,19 @@ class _CountDeckState extends State<CountDeck> {
             Expanded(flex: 1, child: Container()),
             GestureDetector(
               onTap: () {
-                if (i < 51) {
-                  setState(() {
-                    i++;
-                    countCard(deck[i]);
-                  });
-                }
+                setState(() {});
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      buildCard(deck[i]),
+                      buildCard(getNextCard()) ?? buildFaceDownCard(),
                       Visibility(
                         visible: isMultiCard,
-                        child: buildCard(deck[i]),
+                        child: (isMultiCard == true)
+                            ? buildCard(getNextCard())
+                            : buildFaceDownCard(),
                       ),
                     ],
                   ),
@@ -132,9 +129,8 @@ class _CountDeckState extends State<CountDeck> {
   void resetDeck() {
     deck.shuffle();
     setState(() {
-      i = 0;
       count = 0;
-      countCard(deck[0]);
+      i = 0;
     });
   }
 
@@ -144,5 +140,14 @@ class _CountDeckState extends State<CountDeck> {
     } else if (cardValueToNumber(aCard) <= 7) {
       count++;
     }
+  }
+
+  PlayingCard getNextCard() {
+    if (i <= 51) {
+      countCard(deck[i]);
+      i++;
+      return deck[i - 1];
+    }
+    return null;
   }
 }

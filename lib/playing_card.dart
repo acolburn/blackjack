@@ -53,32 +53,35 @@ Widget buildFaceDownCard() {
 }
 
 Widget buildCard(PlayingCard aCard) {
-  return Container(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(8.0),
-      color: Colors.white,
-      border: Border.all(color: Colors.black),
-    ),
-    height: 120.0,
-    width: 80,
-    child: Row(
-      children: <Widget>[
-        Text(
-          cardValueToString(aCard),
-          style: TextStyle(
-            fontSize: 32.0,
-            color: suitColor(aCard),
+  if (aCard != null) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.white,
+        border: Border.all(color: Colors.black),
+      ),
+      height: 120.0,
+      width: 80,
+      child: Row(
+        children: <Widget>[
+          Text(
+            cardValueToString(aCard),
+            style: TextStyle(
+              fontSize: 32.0,
+              color: suitColor(aCard),
+            ),
           ),
-        ),
-        Expanded(
-          child: Container(
-            height: 30.0,
-            child: suitToImage(aCard),
+          Expanded(
+            child: Container(
+              height: 30.0,
+              child: suitToImage(aCard),
+            ),
           ),
-        ),
-      ],
-    ),
-  );
+        ],
+      ),
+    );
+  } else
+    return buildFaceDownCard();
 }
 
 Color suitColor(PlayingCard aCard) {
