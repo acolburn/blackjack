@@ -33,10 +33,10 @@ class _CountDeckState extends State<CountDeck> {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-//          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
               child: Column(
                 children: <Widget>[
                   makeInfoCellButton(
@@ -90,7 +90,7 @@ class _CountDeckState extends State<CountDeck> {
             ),
             //Expanded() widgets help place card location on screen
             //adds space between buttons (on left) & card/count (in middle)
-            Expanded(flex: 1, child: Container()),
+//            Expanded(flex: 1, child: Container()),
             GestureDetector(
               onTap: () {
                 setState(() {});
@@ -116,10 +116,16 @@ class _CountDeckState extends State<CountDeck> {
                 ],
               ),
             ),
-
             //Expanded() widgets help place card location on screen
-            //adds space between card/count (in middle) & space (right)
-            Expanded(flex: 2, child: Container())
+            Expanded(flex: 2, child: Container()),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
+              child: Text(':00',
+                  style: TextStyle(
+                      fontSize: 42,
+                      fontFamily: 'Verdana',
+                      color: Colors.white)),
+            ),
           ],
         ),
       ),
