@@ -120,11 +120,16 @@ class _CountDeckState extends State<CountDeck> {
             Expanded(flex: 2, child: Container()),
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
-              child: Text(':00',
-                  style: TextStyle(
-                      fontSize: 42,
-                      fontFamily: 'Verdana',
-                      color: Colors.white)),
+              child: InkWell(
+                onTap: () {
+                  print('Timer tapped');
+                },
+                child: Text(':00',
+                    style: TextStyle(
+                        fontSize: 42,
+                        fontFamily: 'Verdana',
+                        color: Colors.white)),
+              ),
             ),
           ],
         ),
