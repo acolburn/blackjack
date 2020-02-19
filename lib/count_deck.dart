@@ -35,13 +35,13 @@ class _CountDeckState extends State<CountDeck> {
               fit: BoxFit.cover,
             ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
-                child: Column(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 26.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Column(
                   children: <Widget>[
                     makeInfoCellButton(
                       name: 'Reset Deck',
@@ -91,56 +91,56 @@ class _CountDeckState extends State<CountDeck> {
                     ),
                   ],
                 ),
-              ),
-              //Expanded() widgets help place card location on screen
-              //adds space between buttons (on left) & card/count (in middle)
+                //Expanded() widgets help place card location on screen
+                //adds space between buttons (on left) & card/count (in middle)
 //            Expanded(flex: 1, child: Container()),
-              GestureDetector(
-                onTap: () {
-                  setState(() {});
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        buildCard(getNextCard()) ?? buildFaceDownCard(),
-                        Visibility(
-                          visible: isMultiCard,
-                          child: (isMultiCard == true)
-                              ? buildCard(getNextCard())
-                              : buildFaceDownCard(),
-                        ),
-                      ],
-                    ),
-                    Visibility(
-                        visible: isCountVisible,
-                        child: Text('$count',
-                            style:
-                                TextStyle(fontSize: 42, color: Colors.black)))
-                  ],
+                GestureDetector(
+                  onTap: () {
+                    setState(() {});
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          buildCard(getNextCard()) ?? buildFaceDownCard(),
+                          Visibility(
+                            visible: isMultiCard,
+                            child: (isMultiCard == true)
+                                ? buildCard(getNextCard())
+                                : buildFaceDownCard(),
+                          ),
+                        ],
+                      ),
+                      Visibility(
+                          visible: isCountVisible,
+                          child: Text('$count',
+                              style:
+                                  TextStyle(fontSize: 42, color: Colors.black)))
+                    ],
+                  ),
                 ),
-              ),
-              //Expanded() widgets help place card location on screen
-              Expanded(flex: 2, child: Container()),
-              Consumer<StopWatchProvider>(
-                builder: (context, provider, child) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
-                    child: InkWell(
-                      onTap: () {
-                        provider.tapStopWatch();
-                      },
-                      child: Text(provider.stopwatchText,
-                          style: TextStyle(
-                              fontSize: 42,
-                              fontFamily: 'Verdana',
-                              color: Colors.white)),
-                    ),
-                  );
-                },
-              ),
-            ],
+                //Expanded() widgets help place card location on screen
+                Expanded(flex: 1, child: Container()),
+                Consumer<StopWatchProvider>(
+                  builder: (context, provider, child) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 18.0),
+                      child: InkWell(
+                        onTap: () {
+                          provider.tapStopWatch();
+                        },
+                        child: Text(provider.stopwatchText,
+                            style: TextStyle(
+                                fontSize: 32,
+                                fontFamily: 'Verdana',
+                                color: Colors.white)),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
