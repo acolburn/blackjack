@@ -22,8 +22,11 @@ Decision checkForDoubles(
     } else
       result = Decision.hit;
   } else if (total == 11) {
-    //Always double
-    result = Decision.double;
+    //Double 2-10, hit A
+    if (dealerCard.value == CardValue.ace) {
+      result = Decision.hit;
+    } else
+      result = Decision.double;
   }
 
   return result;
