@@ -25,122 +25,119 @@ class _CountDeckState extends State<CountDeck> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<StopWatchProvider>(
-      create: (context) => StopWatchProvider(),
-      child: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('images/blackjack_table.jpg'),
-              fit: BoxFit.cover,
-            ),
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/blackjack_table.jpg'),
+            fit: BoxFit.cover,
           ),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 26.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    makeInfoCellButton(
-                      name: 'Reset Deck',
-                      action: resetDeck,
-                    ),
-                    makeInfoCellButton(
-                        name: 'Display Count',
-                        action: () {
-                          setState(() {
-                            isCountVisible = !isCountVisible;
-                          });
-                        }),
-                    makeInfoCellButton(
-                        name: 'Auto',
-                        action: () {
-                          resetDeck();
-                          Timer.periodic(Duration(seconds: 1), (timer) {
-                            print('$i');
-                            if (i < 51) {
-                              i++;
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 26.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  makeInfoCellButton(
+                    name: 'Reset Deck',
+                    action: resetDeck,
+                  ),
+                  makeInfoCellButton(
+                      name: 'Display Count',
+                      action: () {
+                        setState(() {
+                          isCountVisible = !isCountVisible;
+                        });
+                      }),
+                  makeInfoCellButton(
+                      name: 'Auto',
+                      action: () {
+                        resetDeck();
+                        Timer.periodic(Duration(seconds: 1), (timer) {
+                          print('$i');
+                          if (i < 51) {
+                            i++;
 
-                              setState(() {
-                                countCard(deck[i]);
-                              });
-                            } else
-                              timer.cancel();
-                          });
-                        }),
-                    Row(
-                      children: <Widget>[
-                        Checkbox(
-                          activeColor: Colors.white,
-                          checkColor: Colors.green,
-                          value: isMultiCard ?? true,
-                          onChanged: (bool newValue) {
                             setState(() {
-                              isMultiCard = newValue;
+                              countCard(deck[i]);
                             });
-                          },
-                        ),
-                        Text('Show 2+ cards?',
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'Verdana',
-                                color: Colors.white)),
-                      ],
-                    ),
-                  ],
-                ),
-                //Expanded() widgets help place card location on screen
-                //adds space between buttons (on left) & card/count (in middle)
-//            Expanded(flex: 1, child: Container()),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {});
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                          } else
+                            timer.cancel();
+                        });
+                      }),
+                  Row(
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          buildCard(getNextCard()) ?? buildFaceDownCard(),
-                          Visibility(
-                            visible: isMultiCard,
-                            child: (isMultiCard == true)
-                                ? buildCard(getNextCard())
-                                : buildFaceDownCard(),
-                          ),
-                        ],
+                      Checkbox(
+                        activeColor: Colors.white,
+                        checkColor: Colors.green,
+                        value: isMultiCard ?? true,
+                        onChanged: (bool newValue) {
+                          setState(() {
+                            isMultiCard = newValue;
+                          });
+                        },
                       ),
-                      Visibility(
-                          visible: isCountVisible,
-                          child: Text('$count',
-                              style:
-                                  TextStyle(fontSize: 42, color: Colors.black)))
+                      Text('Show 2+ cards?',
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Verdana',
+                              color: Colors.white)),
                     ],
                   ),
+                ],
+              ),
+              //Expanded() widgets help place card location on screen
+              //adds space between buttons (on left) & card/count (in middle)
+//            Expanded(flex: 1, child: Container()),
+              GestureDetector(
+                onTap: () {
+                  setState(() {});
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        buildCard(getNextCard()) ?? buildFaceDownCard(),
+                        Visibility(
+                          visible: isMultiCard,
+                          child: (isMultiCard == true)
+                              ? buildCard(getNextCard())
+                              : buildFaceDownCard(),
+                        ),
+                      ],
+                    ),
+                    Visibility(
+                        visible: isCountVisible,
+                        child: Text('$count',
+                            style:
+                                TextStyle(fontSize: 42, color: Colors.black)))
+                  ],
                 ),
-                //Expanded() widgets help place card location on screen
-                Expanded(flex: 1, child: Container()),
-                Consumer<StopWatchProvider>(
-                  builder: (context, provider, child) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 18.0),
-                      child: InkWell(
-                        onTap: () {
-                          provider.tapStopWatch();
-                        },
-                        child: Text(provider.stopwatchText,
-                            style: TextStyle(
-                                fontSize: 32,
-                                fontFamily: 'Verdana',
-                                color: Colors.white)),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
+              ),
+              //Expanded() widgets help place card location on screen
+              Expanded(flex: 1, child: Container()),
+              Consumer<StopWatchProvider>(
+                builder: (context, provider, child) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 18.0),
+                    child: InkWell(
+                      onTap: () {
+                        provider.tapStopWatch();
+                      },
+                      child: Text(provider.stopwatchText,
+                          style: TextStyle(
+                              fontSize: 32,
+                              fontFamily: 'Verdana',
+                              color: Colors.white)),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ),

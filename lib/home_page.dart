@@ -81,188 +81,184 @@ class _MyHomeState extends State<MyHome> {
     makeComputerDecision();
 
     //Build UI
-    return ChangeNotifierProvider<StopWatchProvider>(
-      create: (context) => StopWatchProvider(),
-      child: Scaffold(
-        backgroundColor: Colors.green[500],
-        // child: Column(
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('images/blackjack_table.jpg'),
-              fit: BoxFit.cover,
-            ),
+    return Scaffold(
+      backgroundColor: Colors.green[500],
+      // child: Column(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/blackjack_table.jpg'),
+            fit: BoxFit.cover,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  //Display #correct and #incorrect
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        makeInfoCell('Correct: $correct'),
-                        makeInfoCell('Incorrect: $incorrect'),
-                        makeInfoCell('$percentCorrect% correct'),
-                        makeInfoCellButton(
-                            name: 'Reset',
-                            action: () {
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                //Display #correct and #incorrect
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      makeInfoCell('Correct: $correct'),
+                      makeInfoCell('Incorrect: $incorrect'),
+                      makeInfoCell('$percentCorrect% correct'),
+                      makeInfoCellButton(
+                          name: 'Reset',
+                          action: () {
+                            setState(() {
+                              correct = 0;
+                              incorrect = 0;
+                              percentCorrect = 100;
+                              rowList = [];
+                            });
+                          }),
+                      makeInfoCellButton(
+                          name: 'Errors',
+                          action: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    ErrorScreen(),
+                              ),
+                            );
+                          }),
+                      Row(
+                        children: <Widget>[
+                          Checkbox(
+                            activeColor: Colors.white,
+                            checkColor: Colors.green,
+                            value: inclBlackjacks ?? true,
+                            onChanged: (bool newValue) {
                               setState(() {
-                                correct = 0;
-                                incorrect = 0;
-                                percentCorrect = 100;
-                                rowList = [];
+                                inclBlackjacks = newValue;
                               });
-                            }),
-                        makeInfoCellButton(
-                            name: 'Errors',
-                            action: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      ErrorScreen(),
-                                ),
-                              );
-                            }),
-                        Row(
-                          children: <Widget>[
-                            Checkbox(
-                              activeColor: Colors.white,
-                              checkColor: Colors.green,
-                              value: inclBlackjacks ?? true,
-                              onChanged: (bool newValue) {
-                                setState(() {
-                                  inclBlackjacks = newValue;
-                                });
-                              },
-                            ),
-                            Text('Include blackjacks?',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'Verdana',
-                                    color: Colors.white)),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(flex: 1, child: Container()),
-                  //Dealer's cards
-                  Expanded(
-                    flex: 6,
-                    child: Stack(
-                      overflow: Overflow.visible,
-                      children: <Widget>[
-                        buildFaceDownCard(),
-                        Positioned(
-                          left: 30.0,
-                          child: buildCard(dealerCard),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Consumer<StopWatchProvider>(
-                    builder: (context, provider, child) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 18.0),
-                        child: InkWell(
-                          onTap: () {
-                            provider.tapStopWatch();
-                          },
-                          child: Text(provider.stopwatchText,
+                            },
+                          ),
+                          Text('Include blackjacks?',
                               style: TextStyle(
-                                  fontSize: 32,
+                                  fontSize: 12,
                                   fontFamily: 'Verdana',
                                   color: Colors.white)),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-
-              //Player's cards
-              GestureDetector(
-                behavior: HitTestBehavior
-                    .translucent, //entire screen [row areas] now recognized
-                onTap: () {
-                  processPlayerDecision(context, Decision.hit);
-                },
-                onDoubleTap: () {
-                  processPlayerDecision(context, Decision.double);
-                },
-                onHorizontalDragEnd: (e) {
-                  processPlayerDecision(context, Decision.stand);
-                },
-                onScaleEnd: (end) {
-                  processPlayerDecision(context, Decision.split);
-                },
-                child: Stack(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        buildCard(playerCard1),
-                        buildCard(playerCard2),
-                      ],
-                    ),
-                    Visibility(
-                      child: Center(
-                        child: Text(messageText,
-                            style:
-                                TextStyle(fontSize: 32, color: Colors.black)),
+                        ],
                       ),
-                      visible: messageIsVisible,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              //Player's decision buttons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  PlayButton(
-                    buttonText: 'Hit',
-                    buttonColor: Colors.green[600],
-                    onPress: () {
-                      processPlayerDecision(context, Decision.hit);
-                    },
+                Expanded(flex: 1, child: Container()),
+                //Dealer's cards
+                Expanded(
+                  flex: 6,
+                  child: Stack(
+                    overflow: Overflow.visible,
+                    children: <Widget>[
+                      buildFaceDownCard(),
+                      Positioned(
+                        left: 30.0,
+                        child: buildCard(dealerCard),
+                      ),
+                    ],
                   ),
-                  PlayButton(
-                    buttonText: 'Stand',
-                    buttonColor: Colors.red,
-                    onPress: () {
-                      processPlayerDecision(context, Decision.stand);
-                    },
+                ),
+                Consumer<StopWatchProvider>(
+                  builder: (context, provider, child) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 18.0),
+                      child: InkWell(
+                        onTap: () {
+                          provider.tapStopWatch();
+                        },
+                        child: Text(provider.stopwatchText,
+                            style: TextStyle(
+                                fontSize: 32,
+                                fontFamily: 'Verdana',
+                                color: Colors.white)),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+
+            //Player's cards
+            GestureDetector(
+              behavior: HitTestBehavior
+                  .translucent, //entire screen [row areas] now recognized
+              onTap: () {
+                processPlayerDecision(context, Decision.hit);
+              },
+              onDoubleTap: () {
+                processPlayerDecision(context, Decision.double);
+              },
+              onHorizontalDragEnd: (e) {
+                processPlayerDecision(context, Decision.stand);
+              },
+              onScaleEnd: (end) {
+                processPlayerDecision(context, Decision.split);
+              },
+              child: Stack(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      buildCard(playerCard1),
+                      buildCard(playerCard2),
+                    ],
+                  ),
+                  Visibility(
+                    child: Center(
+                      child: Text(messageText,
+                          style: TextStyle(fontSize: 32, color: Colors.black)),
+                    ),
+                    visible: messageIsVisible,
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  PlayButton(
-                    buttonText: 'Double',
-                    buttonColor: Colors.blue,
-                    onPress: () {
-                      processPlayerDecision(context, Decision.double);
-                    },
-                  ),
-                  PlayButton(
-                    buttonText: 'Split',
-                    buttonColor: Colors.amber,
-                    onPress: () {
-                      processPlayerDecision(context, Decision.split);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
+            ),
+            //Player's decision buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                PlayButton(
+                  buttonText: 'Hit',
+                  buttonColor: Colors.green[600],
+                  onPress: () {
+                    processPlayerDecision(context, Decision.hit);
+                  },
+                ),
+                PlayButton(
+                  buttonText: 'Stand',
+                  buttonColor: Colors.red,
+                  onPress: () {
+                    processPlayerDecision(context, Decision.stand);
+                  },
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                PlayButton(
+                  buttonText: 'Double',
+                  buttonColor: Colors.blue,
+                  onPress: () {
+                    processPlayerDecision(context, Decision.double);
+                  },
+                ),
+                PlayButton(
+                  buttonText: 'Split',
+                  buttonColor: Colors.amber,
+                  onPress: () {
+                    processPlayerDecision(context, Decision.split);
+                  },
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
