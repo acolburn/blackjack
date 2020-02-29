@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'stopwatch.dart';
 
 enum Decision { hit, stand, double, split, none }
-enum HandType { pairs, softHands, allHands, highCountHands }
+enum HandType { pairs, softHands, allHands }
 
 void main() => runApp(MyApp());
 
@@ -76,7 +76,8 @@ class StartPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => MyHome(hand),
+                      builder: (BuildContext context) => MyHome(hand, false),
+                      //false means isHighCount will be false
                     ),
                   );
                 },
@@ -93,7 +94,8 @@ class StartPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => MyHome(hand),
+                      builder: (BuildContext context) => MyHome(hand, false),
+                      //false means isHighCount will be false
                     ),
                   );
                 },
@@ -110,7 +112,8 @@ class StartPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => MyHome(hand),
+                      builder: (BuildContext context) => MyHome(hand, false),
+                      //false means isHighCount will be false
                     ),
                   );
                 },
@@ -127,7 +130,8 @@ class StartPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => MyHome(hand),
+                      builder: (BuildContext context) => MyHome(hand, true),
+                      //true means isHighCount will be true
                     ),
                   );
                 },

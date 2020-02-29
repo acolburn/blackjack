@@ -16,7 +16,8 @@ import 'stopwatch.dart';
 
 class MyHome extends StatefulWidget {
   final HandType handType;
-  MyHome(this.handType);
+  final bool isHighCount;
+  MyHome(this.handType, this.isHighCount);
 
   @override
   _MyHomeState createState() => _MyHomeState();
@@ -279,13 +280,15 @@ class _MyHomeState extends State<MyHome> {
         playerCard2.value == CardValue.ace) {
       computerDecision = processSoftHand(playerCard1, playerCard2, dealerCard);
     }
-    //Check for doubles
+    //Check for doubles. computerDecision may differ when count is high
     else if (handValue == 9 || handValue == 10 || handValue == 11) {
-      computerDecision = checkForDoubles(playerCard1, playerCard2, dealerCard);
+      computerDecision = checkForDoubles(
+          playerCard1, playerCard2, dealerCard, widget.isHighCount);
     } else
-    //It's your basic hard hand, totalling <=8 or 12-20
+    //It's your basic hard hand, totalling <=8 or 12-20. computerDecision may differ when count is high
     {
-      computerDecision = processHardHand(playerCard1, playerCard2, dealerCard);
+      computerDecision = processHardHand(
+          playerCard1, playerCard2, dealerCard, widget.isHighCount);
     }
   }
 
