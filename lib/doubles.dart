@@ -14,14 +14,10 @@ Decision checkForDoubles(PlayingCard playerCard1, PlayingCard playerCard2,
     result = Decision.hit;
   }
   //Adjustment for high count: 9 doubles against 3 or 7
-  if (total == 9 &&
-      isHighCount == true &&
-      dealerCard.value == CardValue.three) {
+  if (total == 9 && isHighCount && dealerCard.value == CardValue.three) {
     result = Decision.double;
   }
-  if (total == 9 &&
-      isHighCount == true &&
-      dealerCard.value == CardValue.seven) {
+  if (total == 9 && isHighCount && dealerCard.value == CardValue.seven) {
     result = Decision.double;
   }
 
@@ -37,7 +33,7 @@ Decision checkForDoubles(PlayingCard playerCard1, PlayingCard playerCard2,
   //-------------------Start total = 10---------------
   if (total == 10) {
     //Adjustment for high count: 10 always doubles
-    if (isHighCount == true) {
+    if (isHighCount) {
       result = Decision.double;
     }
     //rest of the time double if upcard is 2-9, hit 10, A
@@ -51,7 +47,7 @@ Decision checkForDoubles(PlayingCard playerCard1, PlayingCard playerCard2,
   //-------------------Start total = 11----------------
   if (total == 11) {
     //Adjustment for high count: 11 always doubles
-    if (isHighCount == true) {
+    if (isHighCount) {
       result = Decision.double;
     }
     //Double 2-10, hit A

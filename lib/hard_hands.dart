@@ -11,7 +11,7 @@ Decision processHardHand(PlayingCard playerCard1, PlayingCard playerCard2,
   if (total <= 8) {
     result = Decision.hit;
   }
-  if (isHighCount == true && total == 8) {
+  if (isHighCount && total == 8) {
     if (dealerCard.value == CardValue.five ||
         dealerCard.value == CardValue.six) {
       result = Decision.double;
@@ -24,7 +24,7 @@ Decision processHardHand(PlayingCard playerCard1, PlayingCard playerCard2,
   if (total == 12) {
     if (dealerCard.value == CardValue.two ||
         dealerCard.value == CardValue.three) {
-      if (isHighCount == true) {
+      if (isHighCount) {
         result = Decision.stand;
       } else {
         result = Decision.hit;
@@ -43,11 +43,9 @@ Decision processHardHand(PlayingCard playerCard1, PlayingCard playerCard2,
 
   //13 to 16 depend on dealerCard
   //when count is high, 15 and 16 stand against a 10
-  if (isHighCount == true &&
-      total == 16 &&
-      cardValueToNumber(dealerCard) == 10) {
+  if (isHighCount && total == 16 && cardValueToNumber(dealerCard) == 10) {
     result = Decision.stand;
-  } else if (isHighCount == true &&
+  } else if (isHighCount &&
       total == 15 &&
       cardValueToNumber(dealerCard) == 10) {
     result = Decision.stand;
