@@ -76,6 +76,69 @@ class _MyHomeState extends State<MyHome> {
     dealerCard = deck[random.nextInt(deck.length)];
   }
 
+  Widget makeInfoTable() {
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            //Display #correct and #incorrect
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  makeInfoCell('Correct: $correct'),
+                  makeInfoCell('Incorrect: $incorrect'),
+                  makeInfoCell('$percentCorrect% correct'),
+                  makeInfoCellButton(
+                      name: 'Reset',
+                      action: () {
+                        setState(() {
+                          correct = 0;
+                          incorrect = 0;
+                          percentCorrect = 100;
+                          rowList = [];
+                        });
+                      }),
+                  makeInfoCellButton(
+                      name: 'Errors',
+                      action: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => ErrorScreen(),
+                          ),
+                        );
+                      }),
+                  Row(
+                    children: <Widget>[
+                      Checkbox(
+                        activeColor: Colors.white,
+                        checkColor: Colors.green,
+                        value: inclBlackjacks ?? true,
+                        onChanged: (bool newValue) {
+                          setState(() {
+                            inclBlackjacks = newValue;
+                          });
+                        },
+                      ),
+                      Text('Include blackjacks?',
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Verdana',
+                              color: Colors.white)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     dealHand();
@@ -83,187 +146,167 @@ class _MyHomeState extends State<MyHome> {
 
     //Build UI
     return Scaffold(
-      backgroundColor: Colors.green[500],
-      // child: Column(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/blackjack_table.jpg'),
-            fit: BoxFit.cover,
+      body: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/blackjack_table.jpg'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                //Display #correct and #incorrect
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      makeInfoCell('Correct: $correct'),
-                      makeInfoCell('Incorrect: $incorrect'),
-                      makeInfoCell('$percentCorrect% correct'),
-                      makeInfoCellButton(
-                          name: 'Reset',
-                          action: () {
-                            setState(() {
-                              correct = 0;
-                              incorrect = 0;
-                              percentCorrect = 100;
-                              rowList = [];
-                            });
-                          }),
-                      makeInfoCellButton(
-                          name: 'Errors',
-                          action: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    ErrorScreen(),
-                              ),
-                            );
-                          }),
-                      Row(
-                        children: <Widget>[
-                          Checkbox(
-                            activeColor: Colors.white,
-                            checkColor: Colors.green,
-                            value: inclBlackjacks ?? true,
-                            onChanged: (bool newValue) {
-                              setState(() {
-                                inclBlackjacks = newValue;
-                              });
-                            },
-                          ),
-                          Text('Include blackjacks?',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  fontFamily: 'Verdana',
-                                  color: Colors.white)),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(flex: 1, child: Container()),
-                //Dealer's cards
-                Expanded(
-                  flex: 6,
-                  child: Stack(
-                    overflow: Overflow.visible,
-                    children: <Widget>[
-                      buildFaceDownCard(),
-                      Positioned(
-                        left: 30.0,
-                        child: buildCard(dealerCard),
-                      ),
-                    ],
-                  ),
-                ),
-                Consumer<StopWatchProvider>(
-                  builder: (context, provider, child) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 18.0),
-                      child: InkWell(
-                        onTap: () {
-                          provider.tapStopWatch();
-                        },
-                        child: Text(provider.stopwatchText,
-                            style: TextStyle(
-                                fontSize: 32,
-                                fontFamily: 'Verdana',
-                                color: Colors.white)),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-
-            //Player's cards
-            GestureDetector(
-              behavior: HitTestBehavior
-                  .translucent, //entire screen [row areas] now recognized
-              onTap: () {
-                processPlayerDecision(context, Decision.hit);
-              },
-              onDoubleTap: () {
-                processPlayerDecision(context, Decision.double);
-              },
-              onHorizontalDragEnd: (e) {
-                processPlayerDecision(context, Decision.stand);
-              },
-              onScaleEnd: (end) {
-                processPlayerDecision(context, Decision.split);
-              },
-              child: Stack(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      buildCard(playerCard1),
-                      buildCard(playerCard2),
-                    ],
-                  ),
-                  Visibility(
-                    child: Center(
-                      child: Text(messageText,
-                          style: TextStyle(fontSize: 32, color: Colors.black)),
+          child: Column(
+            children: <Widget>[
+              //Top Row
+              Expanded(
+                flex: 3,
+                child: Stack(
+                  children: <Widget>[
+                    //Info table in top left corner
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: makeInfoTable(),
                     ),
-                    visible: messageIsVisible,
-                  ),
-                ],
+                    //Stopwatch in top right corner
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Consumer<StopWatchProvider>(
+                        builder: (context, provider, child) {
+                          return InkWell(
+                            onTap: () {
+                              provider.tapStopWatch();
+                            },
+                            child: Text(provider.stopwatchText,
+                                style: TextStyle(
+                                    fontSize: 32,
+                                    fontFamily: 'Verdana',
+                                    color: Colors.white)),
+                          );
+                        },
+                      ),
+                    ),
+                    //Player card 1
+                    AnimatedPositioned(
+                      duration: Duration(seconds: 1),
+                      top: 270,
+                      left: 140,
+                      child: buildCard(playerCard1),
+                    ),
+                    //Player card 2
+                    AnimatedPositioned(
+                      duration: Duration(seconds: 1),
+                      top: 270,
+                      left: 220,
+                      child: buildCard(playerCard2),
+                    ),
+                    //Dealer card (face down)
+                    AnimatedPositioned(
+                      duration: Duration(seconds: 1),
+                      top: 60,
+                      left: 150,
+                      child: buildFaceDownCard(),
+                    ),
+                    //Dealer card (face up)
+                    AnimatedPositioned(
+                      duration: Duration(seconds: 1),
+                      top: 60,
+                      left: 180,
+                      child: buildCard(dealerCard),
+                    ),
+                    //Message (will appear in center of Expanded(flex:2) screen area)
+                    Visibility(
+                      child: Center(
+                        child: Text(messageText,
+                            style:
+                                TextStyle(fontSize: 32, color: Colors.black)),
+                      ),
+                      visible: messageIsVisible,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            //Player's decision buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                PlayButton(
-                  buttonText: 'Hit',
-                  buttonColor: Colors.green[600],
-                  onPress: () {
-                    processPlayerDecision(context, Decision.hit);
-                  },
+              //Player's decision buttons
+              Expanded(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    PlayButton(
+                      buttonText: 'Hit',
+                      buttonColor: Colors.green[600],
+                      onPress: () {
+                        processPlayerDecision(context, Decision.hit);
+                      },
+                    ),
+                    PlayButton(
+                      buttonText: 'Stand',
+                      buttonColor: Colors.red,
+                      onPress: () {
+                        processPlayerDecision(context, Decision.stand);
+                      },
+                    ),
+                  ],
                 ),
-                PlayButton(
-                  buttonText: 'Stand',
-                  buttonColor: Colors.red,
-                  onPress: () {
-                    processPlayerDecision(context, Decision.stand);
-                  },
+              ),
+              Expanded(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    PlayButton(
+                      buttonText: 'Double',
+                      buttonColor: Colors.blue,
+                      onPress: () {
+                        processPlayerDecision(context, Decision.double);
+                      },
+                    ),
+                    PlayButton(
+                      buttonText: 'Split',
+                      buttonColor: Colors.amber,
+                      onPress: () {
+                        processPlayerDecision(context, Decision.split);
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                PlayButton(
-                  buttonText: 'Double',
-                  buttonColor: Colors.blue,
-                  onPress: () {
-                    processPlayerDecision(context, Decision.double);
-                  },
-                ),
-                PlayButton(
-                  buttonText: 'Split',
-                  buttonColor: Colors.amber,
-                  onPress: () {
-                    processPlayerDecision(context, Decision.split);
-                  },
-                ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+
+  //Build UI
+
+  //           Expanded(
+  //             flex: 6,
+  //             child: Stack(
+  //               overflow: Overflow.visible,
+  //               children: <Widget>[],
+  //             ),
+  //           ),
+
+  //       //Player's cards
+  //       GestureDetector(
+  //         behavior: HitTestBehavior
+  //             .translucent, //entire screen [row areas] now recognized
+  //         onTap: () {
+  //           processPlayerDecision(context, Decision.hit);
+  //         },
+  //         onDoubleTap: () {
+  //           processPlayerDecision(context, Decision.double);
+  //         },
+  //         onHorizontalDragEnd: (e) {
+  //           processPlayerDecision(context, Decision.stand);
+  //         },
+  //         onScaleEnd: (end) {
+  //           processPlayerDecision(context, Decision.split);
+  //         },
+  //         child: Stack(
+  //           children: <Widget>[
+
+  //           ],
+  //         ),
 
   void makeComputerDecision() {
     handValue = computeHandValue(playerCard1, playerCard2);
