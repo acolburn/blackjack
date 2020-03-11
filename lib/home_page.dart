@@ -11,8 +11,8 @@ import 'flushbar.dart';
 import 'package:blackjack/doubles.dart';
 import 'info_cell.dart';
 import 'error_screen.dart';
-import 'package:provider/provider.dart';
-import 'stopwatch.dart';
+//import 'package:provider/provider.dart';
+//import 'stopwatch.dart';
 
 class MyHome extends StatefulWidget {
   final HandType handType;
@@ -23,7 +23,7 @@ class MyHome extends StatefulWidget {
   _MyHomeState createState() => _MyHomeState();
 }
 
-class _MyHomeState extends State<MyHome> {
+class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
   final random = Random();
 
   PlayingCard playerCard1;
@@ -39,6 +39,60 @@ class _MyHomeState extends State<MyHome> {
       false; //whether or not you can see the message saying "Blackjack!", etc.
   String messageText = '';
   bool inclBlackjacks;
+
+  AnimationController controller;
+  Animation topFaceDownDealerCard;
+  Animation topFaceUpDealerCard;
+  Animation topPlayerCard1;
+  Animation topPlayerCard2;
+  Animation leftFaceDownDealerCard;
+  Animation leftFaceUpDealerCard;
+  Animation leftPlayerCard1;
+  Animation leftPlayerCard2;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 1000));
+    topPlayerCard1 = Tween<double>(begin: 10, end: 270).animate(CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.0, 0.25, curve: Curves.decelerate)));
+    leftPlayerCard1 = Tween<double>(begin: 300, end: 140).animate(
+        CurvedAnimation(
+            parent: controller,
+            curve: Interval(0.0, 0.25, curve: Curves.decelerate)));
+    topPlayerCard2 = Tween<double>(begin: 10, end: 270).animate(CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.25, 0.5, curve: Curves.decelerate)));
+    leftPlayerCard2 = Tween<double>(begin: 300, end: 220).animate(
+        CurvedAnimation(
+            parent: controller,
+            curve: Interval(0.25, 0.50, curve: Curves.decelerate)));
+    topFaceDownDealerCard = Tween<double>(begin: 10, end: 60).animate(
+        CurvedAnimation(
+            parent: controller,
+            curve: Interval(0.50, 0.75, curve: Curves.decelerate)));
+    leftFaceDownDealerCard = Tween<double>(begin: 300, end: 150).animate(
+        CurvedAnimation(
+            parent: controller,
+            curve: Interval(0.50, 0.75, curve: Curves.decelerate)));
+    topFaceUpDealerCard = Tween<double>(begin: 10, end: 60).animate(
+        CurvedAnimation(
+            parent: controller,
+            curve: Interval(0.75, 1.0, curve: Curves.decelerate)));
+    leftFaceUpDealerCard = Tween<double>(begin: 300, end: 180).animate(
+        CurvedAnimation(
+            parent: controller,
+            curve: Interval(0.75, 1.00, curve: Curves.decelerate)));
+
+    controller.addListener(() {
+      setState(() {});
+    });
+    dealHand(); //assign initial card values; without this, I get null value errors
+    //when first Build() tries to assign values, etc. to cards that don't exist
+    controller.forward();
+  }
 
   void dealHand() {
     List<PlayingCard> deck = makeDeck();
@@ -74,6 +128,8 @@ class _MyHomeState extends State<MyHome> {
 
     //Randomly pick dealer up card:
     dealerCard = deck[random.nextInt(deck.length)];
+
+    // controller.forward();
   }
 
   Widget makeInfoTable() {
@@ -141,7 +197,7 @@ class _MyHomeState extends State<MyHome> {
 
   @override
   Widget build(BuildContext context) {
-    dealHand();
+    // dealHand();
     makeComputerDecision();
 
     //Build UI
@@ -167,49 +223,45 @@ class _MyHomeState extends State<MyHome> {
                       child: makeInfoTable(),
                     ),
                     //Stopwatch in top right corner
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Consumer<StopWatchProvider>(
-                        builder: (context, provider, child) {
-                          return InkWell(
-                            onTap: () {
-                              provider.tapStopWatch();
-                            },
-                            child: Text(provider.stopwatchText,
-                                style: TextStyle(
-                                    fontSize: 32,
-                                    fontFamily: 'Verdana',
-                                    color: Colors.white)),
-                          );
-                        },
-                      ),
-                    ),
+                    // Align(
+                    //   alignment: Alignment.topRight,
+                    //   child: Consumer<StopWatchProvider>(
+                    //     builder: (context, provider, child) {
+                    //       return InkWell(
+                    //         onTap: () {
+                    //           provider.tapStopWatch();
+                    //         },
+                    //         child: Text(provider.stopwatchText,
+                    //             style: TextStyle(
+                    //                 fontSize: 32,
+                    //                 fontFamily: 'Verdana',
+                    //                 color: Colors.white)),
+                    //       );
+                    //     },
+                    //   ),
+                    // ),
                     //Player card 1
-                    AnimatedPositioned(
-                      duration: Duration(seconds: 1),
-                      top: 270,
-                      left: 140,
+                    Positioned(
+                      top: topPlayerCard1.value,
+                      left: leftPlayerCard1.value,
                       child: buildCard(playerCard1),
                     ),
                     //Player card 2
-                    AnimatedPositioned(
-                      duration: Duration(seconds: 1),
-                      top: 270,
-                      left: 220,
+                    Positioned(
+                      top: topPlayerCard2.value,
+                      left: leftPlayerCard2.value,
                       child: buildCard(playerCard2),
                     ),
                     //Dealer card (face down)
-                    AnimatedPositioned(
-                      duration: Duration(seconds: 1),
-                      top: 60,
-                      left: 150,
+                    Positioned(
+                      top: topFaceDownDealerCard.value,
+                      left: leftFaceDownDealerCard.value,
                       child: buildFaceDownCard(),
                     ),
                     //Dealer card (face up)
-                    AnimatedPositioned(
-                      duration: Duration(seconds: 1),
-                      top: 60,
-                      left: 180,
+                    Positioned(
+                      top: topFaceUpDealerCard.value,
+                      left: leftFaceUpDealerCard.value,
                       child: buildCard(dealerCard),
                     ),
                     //Message (will appear in center of Expanded(flex:2) screen area)
@@ -364,5 +416,8 @@ class _MyHomeState extends State<MyHome> {
         dealHand();
       }
     });
+    //Make the cards move
+    controller.reset();
+    controller.forward();
   }
 }
