@@ -57,34 +57,34 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
         vsync: this, duration: Duration(milliseconds: 1000));
     topPlayerCard1 = Tween<double>(begin: 10, end: 270).animate(CurvedAnimation(
         parent: controller,
-        curve: Interval(0.0, 0.25, curve: Curves.decelerate)));
+        curve: Interval(0.0, 0.30, curve: Curves.decelerate)));
     leftPlayerCard1 = Tween<double>(begin: 300, end: 140).animate(
         CurvedAnimation(
             parent: controller,
-            curve: Interval(0.0, 0.25, curve: Curves.decelerate)));
+            curve: Interval(0.0, 0.30, curve: Curves.decelerate)));
     topPlayerCard2 = Tween<double>(begin: 10, end: 270).animate(CurvedAnimation(
         parent: controller,
-        curve: Interval(0.25, 0.5, curve: Curves.decelerate)));
+        curve: Interval(0.2, 0.5, curve: Curves.decelerate)));
     leftPlayerCard2 = Tween<double>(begin: 300, end: 220).animate(
         CurvedAnimation(
             parent: controller,
-            curve: Interval(0.25, 0.50, curve: Curves.decelerate)));
+            curve: Interval(0.2, 0.5, curve: Curves.decelerate)));
     topFaceDownDealerCard = Tween<double>(begin: 10, end: 60).animate(
         CurvedAnimation(
             parent: controller,
-            curve: Interval(0.50, 0.75, curve: Curves.decelerate)));
+            curve: Interval(0.40, 0.7, curve: Curves.decelerate)));
     leftFaceDownDealerCard = Tween<double>(begin: 300, end: 150).animate(
         CurvedAnimation(
             parent: controller,
-            curve: Interval(0.50, 0.75, curve: Curves.decelerate)));
+            curve: Interval(0.40, 0.7, curve: Curves.decelerate)));
     topFaceUpDealerCard = Tween<double>(begin: 10, end: 60).animate(
         CurvedAnimation(
             parent: controller,
-            curve: Interval(0.75, 1.0, curve: Curves.decelerate)));
+            curve: Interval(0.6, 1.0, curve: Curves.decelerate)));
     leftFaceUpDealerCard = Tween<double>(begin: 300, end: 180).animate(
         CurvedAnimation(
             parent: controller,
-            curve: Interval(0.75, 1.00, curve: Curves.decelerate)));
+            curve: Interval(0.6, 1.00, curve: Curves.decelerate)));
 
     controller.addListener(() {
       setState(() {});
@@ -100,6 +100,15 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
     //Randomly pick two cards from deck
     playerCard1 = deck[random.nextInt(deck.length)];
     playerCard2 = deck[random.nextInt(deck.length)];
+
+    //Exclude blackjacks?
+    while ((inclBlackjacks == false) &&
+        (cardValueToNumber(playerCard1) + cardValueToNumber(playerCard2) ==
+            21)) {
+      //Randomly pick two other cards from deck
+      playerCard1 = deck[random.nextInt(deck.length)];
+      playerCard2 = deck[random.nextInt(deck.length)];
+    }
 
     //If you're limiting player hands to pairs only:
     if (widget.handType == HandType.pairs) {
@@ -117,13 +126,6 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
       if (cardValueToNumber(playerCard1) > 9) {
         playerCard1 = deck[random.nextInt(deck.length)];
       }
-    }
-
-    //Include blackjacks?
-    if ((inclBlackjacks == false) &&
-        (cardValueToNumber(playerCard1) + cardValueToNumber(playerCard2) ==
-            21)) {
-      dealHand();
     }
 
     //Randomly pick dealer up card:
@@ -364,7 +366,8 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
     handValue = computeHandValue(playerCard1, playerCard2);
     //If there's a blackjack.
     if (handValue == 21) {
-      displayMessage('BLACKJACK!');
+      displayMessage('BLACKJACK!'); //this method will process the hand, too
+      computerDecision = Decision.none;
     }
     //If there's a pair.
     else if (playerCard1.value == playerCard2.value) {
@@ -393,28 +396,31 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         messageIsVisible = false; //2 seconds later, stop displaying the message
-        dealHand();
       });
     });
+    computerDecision = Decision.none;
+    processPlayerDecision(context, Decision.none);
   }
 
   void processPlayerDecision(BuildContext context, Decision playerDecision) {
-    if (playerDecision != computerDecision) {
+    if (playerDecision == Decision.none) {
+      //it's a blackjack, do nothing, just deal the next hand
+    } else if (playerDecision != computerDecision) {
       incorrect++;
       percentCorrect = ((correct / (correct + incorrect)) * 100).round();
       displayFlushbar(context, playerDecision, computerDecision, playerCard1,
           playerCard2, dealerCard); //this method also adds error to error_chart
     } else
       correct++;
+
     percentCorrect = ((correct / (correct + incorrect)) * 100).round();
     setState(() {
       if (correct == 100 && incorrect == 0) {
         final player = AudioCache();
         player.play('tada.mp3');
         displayMessage('100 IN A ROW! WELL DONE!');
-      } else {
-        dealHand();
       }
+      dealHand();
     });
     //Make the cards move
     controller.reset();
