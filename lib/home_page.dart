@@ -100,9 +100,7 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
     //Randomly pick two cards from deck
     playerCard1 = deck[random.nextInt(deck.length)];
     playerCard2 = deck[random.nextInt(deck.length)];
-
     //Exclude blackjacks?
-    // while ((inclBlackjacks == false) &&
     while (
         cardValueToNumber(playerCard1) + cardValueToNumber(playerCard2) == 21) {
       //Randomly pick two other cards from deck
@@ -122,8 +120,10 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
     //If you're limiting player hands to soft hands only:
     if (widget.handType == HandType.softHands) {
       playerCard2 = deck[0]; //deck[0] is an ace
-      //Getting a lot of blackjacks; this decreases how often they appear
-      if (cardValueToNumber(playerCard1) > 9) {
+      //Exclude blackjacks?
+      while (cardValueToNumber(playerCard1) + cardValueToNumber(playerCard2) ==
+          21) {
+        //Randomly pick another card from deck to go with ace
         playerCard1 = deck[random.nextInt(deck.length)];
       }
     }
