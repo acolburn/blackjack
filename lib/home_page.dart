@@ -38,7 +38,7 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
   bool messageIsVisible =
       false; //whether or not you can see the message saying "Blackjack!", etc.
   String messageText = '';
-  bool inclBlackjacks;
+  // bool inclBlackjacks;
 
   AnimationController controller;
   Animation topFaceDownDealerCard;
@@ -102,9 +102,9 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
     playerCard2 = deck[random.nextInt(deck.length)];
 
     //Exclude blackjacks?
-    while ((inclBlackjacks == false) &&
-        (cardValueToNumber(playerCard1) + cardValueToNumber(playerCard2) ==
-            21)) {
+    // while ((inclBlackjacks == false) &&
+    while (
+        cardValueToNumber(playerCard1) + cardValueToNumber(playerCard2) == 21) {
       //Randomly pick two other cards from deck
       playerCard1 = deck[random.nextInt(deck.length)];
       playerCard2 = deck[random.nextInt(deck.length)];
@@ -171,21 +171,21 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
                       }),
                   Row(
                     children: <Widget>[
-                      Checkbox(
-                        activeColor: Colors.white,
-                        checkColor: Colors.green,
-                        value: inclBlackjacks ?? true,
-                        onChanged: (bool newValue) {
-                          setState(() {
-                            inclBlackjacks = newValue;
-                          });
-                        },
-                      ),
-                      Text('Include blackjacks?',
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: 'Verdana',
-                              color: Colors.white)),
+                      // Checkbox(
+                      //   activeColor: Colors.white,
+                      //   checkColor: Colors.green,
+                      //   value: inclBlackjacks ?? true,
+                      //   onChanged: (bool newValue) {
+                      //     setState(() {
+                      //       inclBlackjacks = newValue;
+                      //     });
+                      //   },
+                      // ),
+                      // Text('Include blackjacks?',
+                      //     style: TextStyle(
+                      //         fontSize: 12,
+                      //         fontFamily: 'Verdana',
+                      //         color: Colors.white)),
                     ],
                   ),
                 ],
@@ -365,12 +365,12 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
   void makeComputerDecision() {
     handValue = computeHandValue(playerCard1, playerCard2);
     //If there's a blackjack.
-    if (handValue == 21) {
-      displayMessage('BLACKJACK!'); //this method will process the hand, too
-      computerDecision = Decision.none;
-    }
+    // if (handValue == 21) {
+    //   displayMessage('BLACKJACK!'); //this method will process the hand, too
+    //   computerDecision = Decision.none;
+    // }
     //If there's a pair.
-    else if (playerCard1.value == playerCard2.value) {
+    if (playerCard1.value == playerCard2.value) {
       computerDecision = processSplit(playerCard1, playerCard2, dealerCard);
     }
     //If there's an ace.
@@ -398,8 +398,8 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
         messageIsVisible = false; //2 seconds later, stop displaying the message
       });
     });
-    computerDecision = Decision.none;
-    processPlayerDecision(context, Decision.none);
+    // computerDecision = Decision.none;
+    // processPlayerDecision(context, Decision.none);
   }
 
   void processPlayerDecision(BuildContext context, Decision playerDecision) {
