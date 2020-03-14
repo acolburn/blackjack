@@ -55,42 +55,34 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
     super.initState();
     controller = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1000));
-    // topPlayerCard1 = Tween<double>(begin: 10, end: 270).animate(CurvedAnimation(
     topPlayerCard1 = Tween<double>(begin: -1, end: 0.95).animate(
         CurvedAnimation(
             parent: controller,
             curve: Interval(0.0, 0.30, curve: Curves.decelerate)));
-    // leftPlayerCard1 = Tween<double>(begin: 300, end: 140).animate(
     leftPlayerCard1 = Tween<double>(begin: 1, end: -0.25).animate(
         CurvedAnimation(
             parent: controller,
             curve: Interval(0.0, 0.30, curve: Curves.decelerate)));
-    // topPlayerCard2 = Tween<double>(begin: 10, end: 270).animate(CurvedAnimation(
     topPlayerCard2 = Tween<double>(begin: -1, end: 0.95).animate(
         CurvedAnimation(
             parent: controller,
             curve: Interval(0.2, 0.5, curve: Curves.decelerate)));
-    // leftPlayerCard2 = Tween<double>(begin: 300, end: 220).animate(
     leftPlayerCard2 = Tween<double>(begin: 1, end: 0.25).animate(
         CurvedAnimation(
             parent: controller,
             curve: Interval(0.2, 0.5, curve: Curves.decelerate)));
-    // topFaceDownDealerCard = Tween<double>(begin: 10, end: 60).animate(
     topFaceDownDealerCard = Tween<double>(begin: -1, end: -0.60).animate(
         CurvedAnimation(
             parent: controller,
             curve: Interval(0.40, 0.7, curve: Curves.decelerate)));
-    // leftFaceDownDealerCard = Tween<double>(begin: 300, end: 150).animate(
     leftFaceDownDealerCard = Tween<double>(begin: 1, end: -0.1).animate(
         CurvedAnimation(
             parent: controller,
             curve: Interval(0.40, 0.7, curve: Curves.decelerate)));
-    // topFaceUpDealerCard = Tween<double>(begin: 10, end: 60).animate(
     topFaceUpDealerCard = Tween<double>(begin: -1, end: -0.6).animate(
         CurvedAnimation(
             parent: controller,
             curve: Interval(0.6, 1.0, curve: Curves.decelerate)));
-    // leftFaceUpDealerCard = Tween<double>(begin: 300, end: 180).animate(
     leftFaceUpDealerCard = Tween<double>(begin: 1, end: 0.1).animate(
         CurvedAnimation(
             parent: controller,
@@ -253,50 +245,29 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
                     //   ),
                     // ),
                     //Player card 1
-                    // Positioned(
-                    // top: topPlayerCard1.value,
-                    // left: leftPlayerCard1.value,
                     Align(
                       alignment: Alignment(
                           leftPlayerCard1.value, topPlayerCard1.value),
                       child: buildCard(playerCard1),
                     ),
                     //Player card 2
-                    // Positioned(
-                    //   top: topPlayerCard2.value,
-                    //   left: leftPlayerCard2.value,
                     Align(
                       alignment: Alignment(
                           leftPlayerCard2.value, topPlayerCard2.value),
                       child: buildCard(playerCard2),
                     ),
                     //Dealer card (face down)
-                    // Positioned(
-                    //   top: topFaceDownDealerCard.value,
-                    //   left: leftFaceDownDealerCard.value,
                     Align(
                       alignment: Alignment(leftFaceDownDealerCard.value,
                           topFaceDownDealerCard.value),
                       child: buildFaceDownCard(),
                     ),
                     //Dealer card (face up)
-                    // Positioned(
-                    //   top: topFaceUpDealerCard.value,
-                    //   left: leftFaceUpDealerCard.value,
                     Align(
                       alignment: Alignment(leftFaceUpDealerCard.value,
                           topFaceUpDealerCard.value),
                       child: buildCard(dealerCard),
                     ),
-                    //Message (will appear in center of Expanded(flex:2) screen area)
-                    // Visibility(
-                    //   child: Center(
-                    //     child: Text(messageText,
-                    //         style:
-                    //             TextStyle(fontSize: 32, color: Colors.black)),
-                    //   ),
-                    //   visible: messageIsVisible,
-                    // ),
                   ],
                 ),
               ),
