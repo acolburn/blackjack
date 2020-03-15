@@ -59,7 +59,7 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
         CurvedAnimation(
             parent: controller,
             curve: Interval(0.0, 0.30, curve: Curves.decelerate)));
-    leftPlayerCard1 = Tween<double>(begin: 1, end: -0.25).animate(
+    leftPlayerCard1 = Tween<double>(begin: 1, end: -0.2).animate(
         CurvedAnimation(
             parent: controller,
             curve: Interval(0.0, 0.30, curve: Curves.decelerate)));
@@ -67,10 +67,9 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
         CurvedAnimation(
             parent: controller,
             curve: Interval(0.2, 0.5, curve: Curves.decelerate)));
-    leftPlayerCard2 = Tween<double>(begin: 1, end: 0.25).animate(
-        CurvedAnimation(
-            parent: controller,
-            curve: Interval(0.2, 0.5, curve: Curves.decelerate)));
+    leftPlayerCard2 = Tween<double>(begin: 1, end: 0.2).animate(CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.2, 0.5, curve: Curves.decelerate)));
     topFaceDownDealerCard = Tween<double>(begin: -1, end: -0.60).animate(
         CurvedAnimation(
             parent: controller,
